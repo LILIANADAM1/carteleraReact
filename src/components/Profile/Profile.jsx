@@ -1,18 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MainContent from "../MainContent/MainContent.jsx";
 import { getInitialData } from "../../config/initialData.js";
 
-const {
-  cardDetails,
-  genresList,
-  popularByGenre,
-  initialGenres,
-  SEARCH_API,
-  cardDetPop,
-} = await getInitialData();
-
 const Profile = () => {
+  // Hooks must be called at the top level of the component
   const [isKidsProfile, setIsKidsProfile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [continueWatching, setContinueWatching] = useState([
@@ -20,9 +12,9 @@ const Profile = () => {
       id: 1,
       title: "Serie Ejemplo 1",
       thumbnail: "https://via.placeholder.com/150",
-      progress: "00:15:30", // Tiempo donde se pausó
-      genres: ["Animación", "Familia"], // Géneros aptos para niños
-      rating: "G", // Clasificación apta para niños
+      progress: "00:15:30",
+      genres: ["Animación", "Familia"],
+      rating: "G",
     },
     {
       id: 2,
@@ -33,8 +25,27 @@ const Profile = () => {
       rating: "PG",
     },
   ]);
+  const [initialData, setInitialData] = useState(null);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Hook para redirigir
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getInitialData();
+      setInitialData(data);
+    };
+    fetchData();
+  }, []);
+
+  if (!initialData) return null;
+
+  const {
+    cardDetails,
+    genresList,
+    popularByGenre,
+    initialGenres,
+    SEARCH_API,
+    cardDetPop,
+  } = initialData;
 
   const handleSwitchProfile = () => {
     setIsKidsProfile((prev) => !prev);
@@ -45,7 +56,7 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    navigate("/"); // Redirigir al usuario a la página de inicio
+    navigate("/");
   };
 
   return (
@@ -64,7 +75,7 @@ const Profile = () => {
               : "Cambiar a Perfil Infantil"}
           </button>
           <button
-            onClick={handleLogout} // Llamar a la función handleLogout
+            onClick={handleLogout}
             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
           >
             Cerrar Sesión
@@ -109,7 +120,6 @@ const Profile = () => {
         </div>
       </header>
 
-      {/* Contenido principal */}
       <MainContent
         cardDetails={cardDetails}
         genresList={genresList}
@@ -118,7 +128,7 @@ const Profile = () => {
         SEARCH_API={SEARCH_API}
         cardDetPop={cardDetPop}
         continueWatching={continueWatching}
-        isKidsProfile={isKidsProfile} // Pasar el estado del perfil infantil
+        isKidsProfile={isKidsProfile}
       />
     </div>
   );
