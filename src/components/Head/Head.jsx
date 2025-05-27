@@ -8,7 +8,8 @@ const Head = ({
   navClassName = "",
   onNavClick,
   onSearch,
-  showSearch = true, // NUEVO: permite controlar si se muestra la barra de búsqueda
+  onTitleClick, // NUEVO: función al hacer clic en el título
+  showSearch = true,
 }) => {
   const [search, setSearch] = React.useState("");
 
@@ -27,9 +28,14 @@ const Head = ({
       <div className="flex items-center justify-between w-full gap-4">
         <div className="flex items-center gap-4">
           {logo && <img src={logo} alt="Logo" className="w-10 h-10" />}
-          <h1 className="text-2xl font-bold text-red-500">{title}</h1>
+          <button
+            onClick={onTitleClick}
+            className="text-2xl font-bold text-red-500 hover:text-red-300 transition cursor-pointer focus:outline-none"
+          >
+            {title}
+          </button>
         </div>
-        {showSearch && ( // SOLO muestra la barra de búsqueda si showSearch es true
+        {showSearch && (
           <input
             type="text"
             value={search}

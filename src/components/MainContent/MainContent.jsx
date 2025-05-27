@@ -171,7 +171,7 @@ const MainContent = ({
           ref={searchResultsRef}
           className="w-full min-h-screen flex flex-col items-center p-8"
         >
-          <h2 className="text-2xl font-bold mb-6">Resultados de búsqueda</h2>
+          <h2 className="text-2xl font-bold mb-6 text-white">Resultados de búsqueda</h2>
           <div className="flex flex-wrap gap-6 justify-center">
             {searchedMovies.length === 0 ? (
               <p className="text-lg text-gray-500">
