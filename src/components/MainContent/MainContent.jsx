@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
 import {
   GenreSelect,
-  Card,
+  CardSmall,
   ButtonCarrusel,
   GenreCarousel,
   Modal,
 } from "../../../index.js";
+import CardTrending from "../CardTrending/CardTrending.jsx";
 
 const MainContent = ({
   cardDetails,
@@ -16,7 +17,7 @@ const MainContent = ({
   cardDetPop,
   continueWatching, // Recibir "Seguir viendo" como prop
   isKidsProfile, // Recibir el estado del perfil infantil
-   searchTerm = "",
+  searchTerm = "",
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(0);
@@ -153,7 +154,7 @@ const MainContent = ({
                   onChange={(value) => setSelectedGenres([value])}
                 />
               </div>
-              <Card
+              <CardTrending
                 key={currentIndex}
                 {...cardDetails[currentIndex]}
                 fullScreen
@@ -165,13 +166,12 @@ const MainContent = ({
         </div>
       </section>
 
-
       {searchTerm.trim() !== "" ? (
         <section
           ref={searchResultsRef}
           className="w-full min-h-screen flex flex-col items-center p-8"
         >
-          <h2 className="text-2xl font-bold mb-6 text-white">Resultados de búsqueda</h2>
+          <h2 className="text-2xl font-bold mb-6">Resultados de búsqueda</h2>
           <div className="flex flex-wrap gap-6 justify-center">
             {searchedMovies.length === 0 ? (
               <p className="text-lg text-gray-500">
@@ -191,7 +191,7 @@ const MainContent = ({
                     className="flex-shrink-0"
                     style={{ width: 220 }}
                   >
-                    <Card
+                    <CardSmall
                       {...details}
                       title={displayTitle}
                       image={`https://image.tmdb.org/t/p/original${movie.poster_path}`}

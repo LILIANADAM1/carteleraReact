@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ButtonCarrusel, Card } from "../../../index.js";
+import { ButtonCarrusel, CardSmall } from "../../../index.js";
 import Modal from "../Modal/Modal";
 
 const GenreCarousel = ({
@@ -43,7 +43,10 @@ const GenreCarousel = ({
     return <p>No hay películas disponibles para el género "{genreName}".</p>;
   }
 
-  const safeVisibleCount = Math.min(responsiveVisibleCount, filteredMovies.length);
+  const safeVisibleCount = Math.min(
+    responsiveVisibleCount,
+    filteredMovies.length
+  );
   const start = Math.max(0, carouselIndex);
   const end = Math.min(start + safeVisibleCount, filteredMovies.length);
 
@@ -64,7 +67,9 @@ const GenreCarousel = ({
 
   return (
     <div key={genreName} className="w-full max-w-5xl">
-      <h3 className="text-2xl font-semibold mb-4 pl-2 text-white">{genreName}</h3>
+      <h3 className="text-2xl font-semibold mb-4 pl-2 text-white">
+        {genreName}
+      </h3>
       <div className="relative flex items-center">
         <ButtonCarrusel
           direction="left"
@@ -87,7 +92,7 @@ const GenreCarousel = ({
                 className="flex-shrink-0"
                 style={{ width: 220 }}
               >
-                <Card
+                <CardSmall
                   {...cardData}
                   title={displayTitle}
                   fullScreen={false}
