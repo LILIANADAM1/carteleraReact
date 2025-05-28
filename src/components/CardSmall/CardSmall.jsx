@@ -59,6 +59,7 @@ const CardSmall = ({
             <AddToListButton
               movie={{ image, title, content, ...props }}
               onAdd={onAdd}
+              myListGlobal={props.myListGlobal}
             />
           </div>
         </>

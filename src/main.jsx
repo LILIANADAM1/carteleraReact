@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import Profile from "../index.js"; // o donde esté tu componente
+import MyList from "./components/MyList/MyList.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -11,6 +12,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/mylist" element={<MyList />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

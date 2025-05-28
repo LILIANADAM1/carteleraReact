@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 
 // Recibe el objeto movie como prop
-const AddToListButton = ({ movie, onAdd }) => {
+const AddToListButton = ({ movie, onAdd, myListGlobal }) => {
   const [inList, setInList] = useState(false);
 
-  // Verifica si la película ya está en la lista al montar
+  // Verifica si la película ya está en la lista al montar y cuando cambia la lista global
   useEffect(() => {
-    const myList = JSON.parse(localStorage.getItem("myList") || "[]");
+    const myList =
+      myListGlobal || JSON.parse(localStorage.getItem("myList") || "[]");
     setInList(myList.some((item) => item.id === movie.id));
-  }, [movie.id]);
+  }, [movie.id, myListGlobal]);
 
-  // Maneja agregar o quitar de la lista
+  // Maneja agregar a la lista (solo agregar, no quitar)
   const handleClick = () => {
     let myList = JSON.parse(localStorage.getItem("myList") || "[]");
     if (!inList) {
@@ -18,6 +19,9 @@ const AddToListButton = ({ movie, onAdd }) => {
       localStorage.setItem("myList", JSON.stringify(myList));
       setInList(true);
       if (onAdd) onAdd(myList); // Notifica al padre
+    } else {
+      // Si ya está en la lista, igual notifica al padre para forzar actualización
+      if (onAdd) onAdd(myList);
     }
   };
 

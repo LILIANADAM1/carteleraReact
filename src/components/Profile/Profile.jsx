@@ -80,20 +80,9 @@ const Profile = () => {
       )}
       <header className="flex justify-between items-center mb-6 bg-black">
         <h1 className="text-3xl font-bold text-white">
-          {isKidsProfile ? "Perfil Infantil" : "Tu Perfil"}
+          {isKidsProfile ? "" : "Tu Perfil"}
         </h1>
         <div className="flex gap-4 items-center">
-          <button
-            onClick={() => setShowMyList((prev) => !prev)}
-            className={`px-4 py-2 rounded font-semibold shadow transition focus:outline-none focus:ring-2 focus:ring-green-400 ${
-              showMyList
-                ? "bg-green-700 text-white border-2 border-green-400 hover:bg-green-800"
-                : "bg-green-500 text-white hover:bg-green-600 border-2 border-green-400"
-            }`}
-            style={{ minWidth: 120 }}
-          >
-            {showMyList ? "Ver catálogo" : "Ver mi lista"}
-          </button>
           <button
             onClick={handleSwitchProfile}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
@@ -121,6 +110,12 @@ const Profile = () => {
                   </li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                     Control de permisos
+                  </li>
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => navigate("/mylist")}
+                  >
+                    Ver mi lista
                   </li>
                   <li
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -157,6 +152,7 @@ const Profile = () => {
                     fullScreen={false}
                     useImg={true}
                     onAdd={(updatedList) => setMyList(updatedList)}
+                    myListGlobal={myList}
                   />
                   <button
                     onClick={() => {
@@ -191,6 +187,8 @@ const Profile = () => {
           cardDetPop={data.cardDetPop}
           continueWatching={continueWatching}
           isKidsProfile={isKidsProfile}
+          myListGlobal={myList}
+          onAddToMyList={setMyList}
         />
       )}
     </div>

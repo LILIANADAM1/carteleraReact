@@ -18,6 +18,8 @@ const MainContent = ({
   continueWatching, // Recibir "Seguir viendo" como prop
   isKidsProfile, // Recibir el estado del perfil infantil
   searchTerm = "",
+  myListGlobal,
+  onAddToMyList,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(0);
@@ -201,6 +203,8 @@ const MainContent = ({
                         setSelectedMovie(movie);
                         setIsMovieModalVisible(true);
                       }}
+                      onAdd={onAddToMyList}
+                      myListGlobal={myListGlobal}
                     />
                   </div>
                 );
