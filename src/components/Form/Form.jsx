@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Form = ({ onSubmit }) => {
+  const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -10,14 +11,16 @@ const Form = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!nombre || !email || !password) {
       setError("Por favor, completa todos los campos.");
       setSuccess("");
       return;
     }
     setError("");
     setSuccess(`¡Bienveni@!`);
-    if (onSubmit) onSubmit({ email, password });
+    // Guardar el nombre del usuario en localStorage
+    localStorage.setItem("user", JSON.stringify({ nombre }));
+    if (onSubmit) onSubmit({ nombre, email, password });
     navigate("/profile");
   };
 
@@ -30,11 +33,34 @@ const Form = ({ onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex flex-col gap-8 w-full h-full max-w-xl mx-auto border border-neutral-800"
+      className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex flex-col gap-8 w-full h-full max-w-xl mx-auto border border-neutral-800"
     >
-      <h2 className="text-2xl font-bold text-white text-center mb-2">Iniciar Sesión</h2>
+      <h2 className="text-2xl font-bold text-white text-center mb-2">
+        Iniciar Sesión
+      </h2>
       <div className="flex flex-col gap-4">
-        <label className="text-white text-sm font-semibold flex items-center gap-2" htmlFor="email">
+        <label
+          className="text-white text-sm font-semibold flex items-center gap-2"
+          htmlFor="email"
+        >
+          Nombre
+        </label>
+        <input
+          id="nombre"
+          name="nombre"
+          type="text"
+          placeholder="Tu nombre"
+          className="bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          value={nombre}
+          onChange={handleChange(setNombre)}
+          autoComplete="nombre"
+        />
+      </div>
+      <div className="flex flex-col gap-4">
+        <label
+          className="text-white text-sm font-semibold flex items-center gap-2"
+          htmlFor="email"
+        >
           Email
         </label>
         <input
@@ -49,7 +75,10 @@ className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex fle
         />
       </div>
       <div className="flex flex-col gap-4">
-        <label className="text-white text-sm font-semibold flex items-center gap-2" htmlFor="password">
+        <label
+          className="text-white text-sm font-semibold flex items-center gap-2"
+          htmlFor="password"
+        >
           Contraseña
         </label>
         <input
@@ -75,7 +104,10 @@ className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex fle
         </div>
       )}
       {success && (
-        <div data-testid="success-message" className="text-green-400 mt-2 text-center">
+        <div
+          data-testid="success-message"
+          className="text-green-400 mt-2 text-center"
+        >
           {success}
         </div>
       )}

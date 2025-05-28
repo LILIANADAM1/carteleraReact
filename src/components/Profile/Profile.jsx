@@ -28,7 +28,10 @@ const Profile = () => {
   ]);
   const [showMyList, setShowMyList] = useState(false);
   const [myList, setMyList] = useState([]);
-  const [user, setUser] = useState({ nombre: "Usuario" }); // Por defecto, puedes cambiar esto según tu lógica de login
+  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const [user, setUser] = useState(
+    storedUser.nombre ? storedUser : { nombre: "Invitado" }
+  ); // Por defecto, puedes cambiar esto según tu lógica de login
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,16 +98,9 @@ const Profile = () => {
             onClick={handleSwitchProfile}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
-            {isKidsProfile
-              ? "Cambiar a Perfil Normal"
-              : "Cambiar a Perfil Infantil"}
+            {isKidsProfile ? "Cambiar a Perfil Normal" : "Infantil"}
           </button>
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-          >
-            Cerrar Sesión
-          </button>
+
           <div className="relative">
             <button
               onClick={toggleMenu}
@@ -126,17 +122,11 @@ const Profile = () => {
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                     Control de permisos
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Borrar historial de búsqueda
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Gestionar suscripciones
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Ayuda y opinión
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Acerca de y avisos legales
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    Cerrar sesión
                   </li>
                 </ul>
               </div>
