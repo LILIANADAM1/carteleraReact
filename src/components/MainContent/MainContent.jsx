@@ -135,40 +135,40 @@ const MainContent = ({
         )}
       </Modal>
 
-      <section className="m-0 w-screen h-screen relative overflow-hidden">
-        <div className="w-screen h-screen flex items-center justify-center">
-          <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
-            <ButtonCarrusel direction="left" onClick={goToPrev} />
-            <div
-              className={
-                "w-screen h-screen flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] " +
-                (transition === 0
-                  ? "translate-x-0"
-                  : transition === 1
-                  ? "translate-x-full"
-                  : "-translate-x-full")
-              }
-            >
-              <div className="absolute top-6 left-8 z-20">
-                <GenreSelect
-                  genresList={genresList}
-                  selectedGenre={selectedGenres[0] || ""}
-                  onChange={(value) => setSelectedGenres([value])}
+      {searchTerm.trim() === "" ? (
+        <section className="m-0 w-screen h-screen relative overflow-hidden">
+          <div className="w-screen h-screen flex items-center justify-center">
+            <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
+              <ButtonCarrusel direction="left" onClick={goToPrev} />
+              <div
+                className={
+                  "w-screen h-screen flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] " +
+                  (transition === 0
+                    ? "translate-x-0"
+                    : transition === 1
+                    ? "translate-x-full"
+                    : "-translate-x-full")
+                }
+              >
+                <div className="absolute top-6 left-8 z-20">
+                  <GenreSelect
+                    genresList={genresList}
+                    selectedGenre={selectedGenres[0] || ""}
+                    onChange={(value) => setSelectedGenres([value])}
+                  />
+                </div>
+                <CardTrending
+                  key={currentIndex}
+                  {...cardDetails[currentIndex]}
+                  fullScreen
+                  useImg={false}
                 />
               </div>
-              <CardTrending
-                key={currentIndex}
-                {...cardDetails[currentIndex]}
-                fullScreen
-                useImg={false}
-              />
+              <ButtonCarrusel direction="right" onClick={goToNext} />
             </div>
-            <ButtonCarrusel direction="right" onClick={goToNext} />
           </div>
-        </div>
-      </section>
-
-      {searchTerm.trim() !== "" ? (
+        </section>
+      ) : (
         <section
           ref={searchResultsRef}
           className="w-full min-h-screen flex flex-col items-center p-8"
@@ -212,7 +212,8 @@ const MainContent = ({
             )}
           </div>
         </section>
-      ) : (
+      )}
+      {searchTerm.trim() === "" && (
         <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-black">
           <div className="w-full flex flex-col gap-12 items-center p-8">
             {/* Carrusel de "Seguir viendo" */}
