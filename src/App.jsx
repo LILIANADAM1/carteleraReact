@@ -8,9 +8,15 @@ function App(props) {
   const [initialData, setInitialData] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchApi, setSearchApi] = useState("");
+  const [cardDetPop, setCardDetPop] = useState([]);
 
   useEffect(() => {
-    getInitialData().then(setInitialData);
+    getInitialData().then((data) => {
+      setInitialData(data);
+      setSearchApi(data.SEARCH_API);
+      setCardDetPop(data.cardDetPop);
+    });
   }, []);
 
   if (!initialData) return <div>Cargando...</div>;
@@ -43,6 +49,8 @@ function App(props) {
             setSearchTerm(term);
           }
         }}
+        SEARCH_API={searchApi}
+        cardDetPop={cardDetPop}
       />
       <MainContent {...initialData} {...props} searchTerm={searchTerm} />
       <Footer>

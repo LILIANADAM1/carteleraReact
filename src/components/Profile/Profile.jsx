@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MainContent from "../MainContent/MainContent.jsx";
 import CardSmall from "../CardSmall/CardSmall.jsx"; // Asegúrate de importar CardSmall
 import { getInitialData } from "../../config/initialData.js";
+import MovieSearch from "../MovieSearch/MovieSearch.jsx";
 
 const Profile = () => {
   const [data, setData] = useState(null);
@@ -175,6 +176,19 @@ const Profile = () => {
           )}
         </section>
       ) : null}
+
+      {/* Buscador de películas */}
+      {data && (
+        <div className="mb-8">
+          <MovieSearch
+            SEARCH_API={data.SEARCH_API}
+            cardDetPop={data.cardDetPop}
+            onAddToMyList={setMyList}
+            myListGlobal={myList}
+            placeholder="Buscar películas en el catálogo..."
+          />
+        </div>
+      )}
 
       {/* Contenido principal (catálogo) */}
       {!showMyList && (

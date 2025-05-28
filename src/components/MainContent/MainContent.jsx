@@ -95,24 +95,15 @@ const MainContent = ({
       const res = await fetch(url);
       const data = await res.json();
       if (!ignore && data.results) {
-        setSearchedMovies(data.results);
+        setTimeout(() => {
+          setSearchedMovies(data.results);
+        }, 2);
       }
     }
     fetchSearch();
     return () => {
       ignore = true;
     };
-  }, [searchTerm]);
-
-  React.useEffect(() => {
-    if (searchTerm.trim() !== "" && searchResultsRef.current) {
-      setTimeout(() => {
-        searchResultsRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 2800);
-    }
   }, [searchTerm]);
 
   return (
@@ -174,9 +165,9 @@ const MainContent = ({
           className="w-full min-h-screen flex flex-col items-center p-8"
         >
           <h2 className="text-2xl font-bold mb-6">Resultados de búsqueda</h2>
-          <div className="flex flex-wrap gap-6 justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-10 justify-center w-full">
             {searchedMovies.length === 0 ? (
-              <p className="text-lg text-gray-500">
+              <p className="text-lg text-gray-500 col-span-full text-center">
                 No se encontraron resultados.
               </p>
             ) : (

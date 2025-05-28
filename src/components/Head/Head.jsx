@@ -1,4 +1,5 @@
 import React from "react";
+import MovieSearch from "../MovieSearch/MovieSearch.jsx";
 
 const Head = ({
   logo,
@@ -10,19 +11,9 @@ const Head = ({
   onSearch,
   onTitleClick, // NUEVO: función al hacer clic en el título
   showSearch = true,
+  SEARCH_API, // <-- nuevo
+  cardDetPop = [], // <-- nuevo
 }) => {
-  const [search, setSearch] = React.useState("");
-
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-
-  const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter" && onSearch) {
-      onSearch(search);
-    }
-  };
-
   return (
     <header className="bg-black text-red flex flex-col items-center py-4 px-8 w-full">
       <div className="flex items-center justify-between w-full gap-4">
@@ -36,14 +27,14 @@ const Head = ({
           </button>
         </div>
         {showSearch && (
-          <input
-            type="text"
-            value={search}
-            onChange={handleSearchChange}
-            onKeyDown={handleSearchKeyDown}
-            placeholder="Buscar películas..."
-            className="px-3 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 w-64 text-black"
-          />
+          <div className="w-96">
+            <MovieSearch
+              SEARCH_API={SEARCH_API}
+              cardDetPop={cardDetPop}
+              placeholder="Buscar películas..."
+              autoFocus={false}
+            />
+          </div>
         )}
         <div className="flex justify-center">
           <nav className={navClassName}>
