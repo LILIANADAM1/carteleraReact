@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ButtonFavorite } from "../../../index.js";
 import { useLocation } from "react-router-dom";
-import AddToListButton from "../AddToListButton/AddToListButton.jsx";
+import AddToListButton from "../AddToListButton/AddToListButton.tsx";
 
 const CardSmall = ({
   image,
