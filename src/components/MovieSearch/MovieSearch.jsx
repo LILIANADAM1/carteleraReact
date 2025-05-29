@@ -75,14 +75,17 @@ const MovieSearch = ({
         {searchTerm && (
           <button
             onClick={() => setSearchTerm("")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full px-3 py-1 text-sm"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent hover:bg-gray-200 text-gray-400 hover:text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-base transition"
             aria-label="Limpiar búsqueda"
             type="button"
+            tabIndex={-1}
+            style={{ pointerEvents: "auto" }}
           >
-            Limpiar
+            ×
           </button>
         )}
       </div>
+
       {searchTerm.trim() !== "" && (
         <section
           ref={searchResultsRef}

@@ -25,17 +25,17 @@ const Head = ({
           >
             {title}
           </button>
+          {showSearch && (
+            <div className="w-96">
+              <MovieSearch
+                SEARCH_API={SEARCH_API}
+                cardDetPop={cardDetPop}
+                placeholder="Buscar películas..."
+                autoFocus={false}
+              />
+            </div>
+          )}
         </div>
-        {showSearch && (
-          <div className="w-96">
-            <MovieSearch
-              SEARCH_API={SEARCH_API}
-              cardDetPop={cardDetPop}
-              placeholder="Buscar películas..."
-              autoFocus={false}
-            />
-          </div>
-        )}
         <div className="flex justify-center">
           <nav className={navClassName}>
             {navItems &&
@@ -51,9 +51,7 @@ const Head = ({
           </nav>
         </div>
       </div>
-      {subtitle && (
-        <h2 className="text-lg text-red-400 mt-2">{subtitle}</h2>
-      )}
+      {subtitle && <h2 className="text-lg text-red-400 mt-2">{subtitle}</h2>}
     </header>
   );
 };

@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import { ButtonFavorite } from "../../../index.js";
 import { useLocation } from "react-router-dom";
 
-const CardTrending = ({ image, title, content, onClick, fullScreen, useImg }) => {
+const CardTrending = ({
+  image,
+  title,
+  content,
+  onClick,
+  fullScreen,
+  useImg,
+}) => {
   const location = useLocation();
-  const isProfilePage = location.pathname === '/profile';
+  const isProfilePage = location.pathname === "/profile";
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleFavorite = () => {
@@ -63,7 +70,7 @@ const CardTrending = ({ image, title, content, onClick, fullScreen, useImg }) =>
             : "text-lg mt-2 mb-1 truncate w-full block"
         }`}
         title={title}
-      ></h3>      
+      ></h3>
       {/* El content original solo para fullScreen */}
       {fullScreen && (
         <p className="bg-[#222] p-5 rounded-[10px] max-w-[600px] w-[90%] text-white relative z-50">

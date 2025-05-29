@@ -15,10 +15,23 @@ const CardSmall = ({
 }) => {
   const location = useLocation();
   const isProfilePage = location.pathname === "/profile";
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(() => {
+    const favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+    return favs.includes(title);
+  });
 
   const toggleFavorite = () => {
-    setIsFavorite((prev) => !prev);
+    setIsFavorite((prev) => {
+      const favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+      let updated;
+      if (!prev) {
+        updated = [...favs, title];
+      } else {
+        updated = favs.filter((t) => t !== title);
+      }
+      localStorage.setItem("favorites", JSON.stringify(updated));
+      return !prev;
+    });
   };
 
   return (
@@ -45,7 +58,8 @@ const CardSmall = ({
         {/* Botones solo en perfil y no fullScreen */}
         {!fullScreen && isProfilePage && (
           <>
-            <div className="flex items-center justify-between gap-2 w-full mt-2 mb-1">
+            <div className="w-full flex items-center justify-between gap-2 mt-2 mb-2 pb-2 relative">
+              <div className="absolute left-0 right-0 bottom-0 top-0 w-full h-full bg-black/20 rounded-xl z-0 pointer-events-none" />
               <ButtonFavorite
                 isFavorite={isFavorite}
                 onToggle={toggleFavorite}
@@ -64,15 +78,50 @@ const CardSmall = ({
                   minHeight: 40,
                   padding: 0,
                 }}
+                aria-label="Más información"
               >
-                +
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                  <rect
+                    x="11"
+                    y="10"
+                    width="2"
+                    height="6"
+                    rx="1"
+                    fill="currentColor"
+                  />
+                  <rect
+                    x="11"
+                    y="7"
+                    width="2"
+                    height="2"
+                    rx="1"
+                    fill="currentColor"
+                  />
+                </svg>
               </button>
-              <div className="flex-1 min-w-0 mx-1">
+              <div
+                className="flex-1 min-w-0 mx-1"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <AddToListButton
                   movie={{ image, title, content, ...props }}
                   onAdd={onAdd}
                   myListGlobal={props.myListGlobal}
-                  buttonClassName="w-full rounded-full bg-black text-white font-bold px-2 py-2 transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 whitespace-nowrap"
+                  buttonClassName="rounded-full bg-black text-white font-bold transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 mx-1 flex items-center justify-center"
                 />
               </div>
             </div>
