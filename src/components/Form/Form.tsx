@@ -33,7 +33,8 @@ const Form = ({ onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex flex-col gap-8 w-full h-full max-w-xl mx-auto border border-neutral-800"
+      className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex flex-col gap-8 w-full h-full max-w-xl mx-auto border border-neutral-800 min-h-0 flex-1"
+      style={{ height: "100%" }}
     >
       <h2 className="text-2xl font-bold text-white text-center mb-2">
         Iniciar Sesión

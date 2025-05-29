@@ -5,7 +5,7 @@ function GenreSelect({ genresList, selectedGenre, onChange }) {
     <div className="flex justify-center my-6">
       <select
         value={selectedGenre || ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange([e.target.value])}
         className="border rounded px-3 py-2 bg-white text-gray-800"
         style={{ minWidth: 200, minHeight: 40 }}
       >

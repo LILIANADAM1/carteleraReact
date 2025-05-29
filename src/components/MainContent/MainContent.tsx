@@ -12,18 +12,19 @@ const MainContent = ({
   cardDetails,
   genresList,
   popularByGenre,
-  initialGenres = [], // Valor por defecto para evitar undefined
+  initialGenres = [],
   SEARCH_API,
   cardDetPop,
-  continueWatching, // Recibir "Seguir viendo" como prop
-  isKidsProfile, // Recibir el estado del perfil infantil
+  continueWatching,
+  isKidsProfile,
   searchTerm = "",
   myListGlobal,
   onAddToMyList,
+  selectedGenres,
+  setSelectedGenres,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(0);
-  const [selectedGenres, setSelectedGenres] = useState(initialGenres || []); // fallback a array vacío
   const [carouselIndexes, setCarouselIndexes] = useState({});
   const [searchedMovies, setSearchedMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -141,13 +142,6 @@ const MainContent = ({
                     : "-translate-x-full")
                 }
               >
-                <div className="absolute top-6 left-8 z-20">
-                  <GenreSelect
-                    genresList={genresList}
-                    selectedGenre={selectedGenres[0] || ""}
-                    onChange={(value) => setSelectedGenres([value])}
-                  />
-                </div>
                 <CardTrending
                   key={currentIndex}
                   {...cardDetails[currentIndex]}
@@ -226,7 +220,10 @@ const MainContent = ({
             )}
 
             {/* Carruseles de géneros */}
-            {selectedGenres.map((genreName) => {
+            {(selectedGenres && selectedGenres.length > 0
+              ? selectedGenres
+              : Object.keys(popularByGenre).slice(0, 3) || []
+            ).map((genreName) => {
               const movies = filterKidsContent(popularByGenre[genreName] || []);
               if (!movies.length) return null;
               const carouselIndex = carouselIndexes[genreName] || 0;
