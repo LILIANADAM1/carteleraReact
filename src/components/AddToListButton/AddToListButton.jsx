@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // Recibe el objeto movie como prop
-const AddToListButton = ({ movie, onAdd, myListGlobal }) => {
+const AddToListButton = ({ movie, onAdd, myListGlobal, buttonClassName }) => {
   const [inList, setInList] = useState(false);
 
   // Verifica si la película ya está en la lista al montar y cuando cambia la lista global
@@ -28,11 +28,14 @@ const AddToListButton = ({ movie, onAdd, myListGlobal }) => {
   return (
     <button
       onClick={handleClick}
-      className={`px-3 py-1 rounded ${
-        inList ? "bg-red-500" : "bg-green-500"
-      } text-white mt-2`}
+      className={
+        buttonClassName ||
+        `px-3 py-1 rounded ${
+          inList ? "bg-red-500" : "bg-green-500"
+        } text-white mt-2`
+      }
     >
-      {inList ? "En mi lista" : "Agregar a mi lista"}
+      {inList ? "En mi lista" : "+ Mi lista"}
     </button>
   );
 };

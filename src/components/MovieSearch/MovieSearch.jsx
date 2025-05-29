@@ -91,9 +91,9 @@ const MovieSearch = ({
           <h2 className="text-xl font-bold mb-4 text-white">
             Resultados de búsqueda
           </h2>
-          <div className="flex flex-wrap gap-6 justify-center w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-10 justify-center w-full">
             {searchedMovies.length === 0 ? (
-              <p className="text-lg text-gray-400 w-full text-center">
+              <p className="text-lg text-gray-400 col-span-full">
                 No se encontraron resultados.
               </p>
             ) : (

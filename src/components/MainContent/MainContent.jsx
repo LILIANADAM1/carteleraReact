@@ -165,9 +165,9 @@ const MainContent = ({
           className="w-full min-h-screen flex flex-col items-center p-8"
         >
           <h2 className="text-2xl font-bold mb-6">Resultados de búsqueda</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-10 justify-center w-full">
+          <div className="flex flex-wrap gap-6 justify-center">
             {searchedMovies.length === 0 ? (
-              <p className="text-lg text-gray-500 col-span-full text-center">
+              <p className="text-lg text-gray-500">
                 No se encontraron resultados.
               </p>
             ) : (
