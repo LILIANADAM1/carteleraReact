@@ -1,6 +1,14 @@
 import React from "react";
 
-const ButtonFavorite = ({ isFavorite, onToggle }) => {
+interface ButtonFavoriteProps {
+  isFavorite: boolean;
+  onToggle: () => void;
+}
+
+const ButtonFavorite: React.FC<ButtonFavoriteProps> = ({
+  isFavorite,
+  onToggle,
+}) => {
   return (
     <button
       onClick={(e) => {
@@ -15,7 +23,7 @@ const ButtonFavorite = ({ isFavorite, onToggle }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6 fill-current"
-        viewBox="0 0 24 24"
+        viewBox="0 0 22 20"
       >
         <path
           d={

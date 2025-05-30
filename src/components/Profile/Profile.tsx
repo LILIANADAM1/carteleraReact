@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MainContent from "../MainContent/MainContent.jsx";
-import CardSmall from "../CardSmall/CardSmall.jsx"; // Asegúrate de importar CardSmall
-import { getInitialData } from "../../config/initialData.js";
-import MovieSearch from "../MovieSearch/MovieSearch.jsx";
+import MainContent from "../MainContent/MainContent";
+import CardSmall from "../CardSmall/CardSmall"; // Asegúrate de importar CardSmall
+import { getInitialData } from "../../config/initialData";
+import MovieSearch from "../MovieSearch/MovieSearch";
+import GenreSelect from "../GenreSelect/GenreSelect";
 
 const Profile = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const [isKidsProfile, setIsKidsProfile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [continueWatching, setContinueWatching] = useState([
@@ -28,7 +29,8 @@ const Profile = () => {
     },
   ]);
   const [showMyList, setShowMyList] = useState(false);
-  const [myList, setMyList] = useState([]);
+  const [myList, setMyList] = useState<any[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
   const [user, setUser] = useState(
     storedUser.nombre ? storedUser : { nombre: "Invitado" }
@@ -70,6 +72,7 @@ const Profile = () => {
   };
 
   if (!data) return null;
+  const genresList = data.genresList || [];
 
   return (
     <div className="bg-black p-8 min-h-screen">
@@ -83,6 +86,7 @@ const Profile = () => {
         <h1 className="text-3xl font-bold text-white">
           {isKidsProfile ? "" : "Tu Perfil"}
         </h1>
+
         <div className="flex gap-4 items-center">
           <button
             onClick={handleSwitchProfile}
@@ -152,13 +156,13 @@ const Profile = () => {
                     {...movie}
                     fullScreen={false}
                     useImg={true}
-                    onAdd={(updatedList) => setMyList(updatedList)}
+                    onAdd={(updatedList: any) => setMyList(updatedList)}
                     myListGlobal={myList}
                   />
                   <button
                     onClick={() => {
                       const updatedList = myList.filter(
-                        (m) => m.id !== movie.id
+                        (m: any) => m.id !== movie.id
                       );
                       setMyList(updatedList);
                       localStorage.setItem(
@@ -177,13 +181,27 @@ const Profile = () => {
         </section>
       ) : null}
 
+      <GenreSelect
+        genresList={genresList}
+        selectedGenre={selectedGenres[0] || ""}
+        onChange={(value: string[]) => setSelectedGenres(value)}
+      />
+
       {/* Buscador de películas */}
       {data && (
         <div className="mb-8">
           <MovieSearch
             SEARCH_API={data.SEARCH_API}
             cardDetPop={data.cardDetPop}
-            onAddToMyList={setMyList}
+            onAddToMyList={(movie: any) => {
+              setMyList((prevList) => {
+                // Evita duplicados por id
+                if (prevList.some((m) => m.id === movie.id)) return prevList;
+                const updatedList = [...prevList, movie];
+                localStorage.setItem("myList", JSON.stringify(updatedList));
+                return updatedList;
+              });
+            }}
             myListGlobal={myList}
             placeholder="Buscar películas en el catálogo..."
           />
@@ -202,7 +220,17 @@ const Profile = () => {
           continueWatching={continueWatching}
           isKidsProfile={isKidsProfile}
           myListGlobal={myList}
-          onAddToMyList={setMyList}
+          onAddToMyList={(movie: any) => {
+            setMyList((prevList) => {
+              // Evita duplicados por id
+              if (prevList.some((m) => m.id === movie.id)) return prevList;
+              const updatedList = [...prevList, movie];
+              localStorage.setItem("myList", JSON.stringify(updatedList));
+              return updatedList;
+            });
+          }}
+          selectedGenres={selectedGenres}
+          setSelectedGenres={setSelectedGenres}
         />
       )}
     </div>

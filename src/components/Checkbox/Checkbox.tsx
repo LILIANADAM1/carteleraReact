@@ -1,6 +1,21 @@
 import React from "react";
 
-const Checkbox = ({ genresList, selectedGenres, handleGenreChange }) => (
+type Genre = {
+  id: number | string;
+  name: string;
+};
+
+interface CheckboxProps {
+  genresList: Genre[];
+  selectedGenres: string[];
+  handleGenreChange: (genreName: string) => void;
+}
+
+const Checkbox: React.FC<CheckboxProps> = ({
+  genresList,
+  selectedGenres,
+  handleGenreChange,
+}) => (
   <section className="w-full flex flex-col items-center mb-6">
     <h2 className="text-xl font-bold mb-2">Elige los géneros a mostrar</h2>
     <div className="flex flex-wrap gap-3 justify-center">

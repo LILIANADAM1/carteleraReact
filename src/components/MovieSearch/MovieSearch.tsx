@@ -1,26 +1,51 @@
-import React, { useState, useEffect, useRef } from "react";
-import CardSmall from "../CardSmall/CardSmall.jsx";
-import Modal from "../Modal/Modal.jsx";
+import React, { useState, useEffect } from "react";
+import Modal from "../Modal/Modal";
+import SearchOverlay from "./SearchOverlay";
 
-const MovieSearch = ({
+interface MovieSearchProps {
+  SEARCH_API: string;
+  cardDetPop?: any[];
+  onAddToMyList?: (movie: any) => void;
+  myListGlobal?: any[];
+  placeholder?: string;
+  autoFocus?: boolean;
+}
+
+const MovieSearch: React.FC<MovieSearchProps> = ({
   SEARCH_API,
   cardDetPop = [],
   onAddToMyList,
   myListGlobal,
-  placeholder = "Buscar películas...",
+  placeholder = "Buscar películas en el catálogo...",
   autoFocus = false,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedMovies, setSearchedMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  interface Movie {
+    title: string;
+    poster_path: string;
+    overview: string;
+    // Add other properties as needed
+  }
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
-  const searchResultsRef = useRef(null);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (value.trim() === "") {
+      setSearchedMovies([]);
+      setIsOverlayVisible(false);
+    }
+  };
 
   useEffect(() => {
     let ignore = false;
     async function fetchSearch() {
       if (searchTerm.trim() === "") {
         setSearchedMovies([]);
+        setIsOverlayVisible(false);
         return;
       }
       const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
@@ -39,9 +64,11 @@ const MovieSearch = ({
         }
         if (!ignore && data.results) {
           setSearchedMovies(data.results);
+          setIsOverlayVisible(true);
         }
       } catch (err) {
         setSearchedMovies([]);
+        setIsOverlayVisible(false);
       }
     }
     fetchSearch();
@@ -49,17 +76,6 @@ const MovieSearch = ({
       ignore = true;
     };
   }, [searchTerm, SEARCH_API]);
-
-  useEffect(() => {
-    if (searchTerm.trim() !== "" && searchResultsRef.current) {
-      setTimeout(() => {
-        searchResultsRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 800);
-    }
-  }, [searchTerm]);
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -86,52 +102,19 @@ const MovieSearch = ({
         )}
       </div>
 
-      {searchTerm.trim() !== "" && (
-        <section
-          ref={searchResultsRef}
-          className="w-full min-h-[200px] flex flex-col items-center"
-        >
-          <h2 className="text-xl font-bold mb-4 text-white">
-            Resultados de búsqueda
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-10 justify-center w-full">
-            {searchedMovies.length === 0 ? (
-              <p className="text-lg text-gray-400 col-span-full">
-                No se encontraron resultados.
-              </p>
-            ) : (
-              searchedMovies.map((movie) => {
-                const details =
-                  cardDetPop.find((c) => c.id === movie.id) || movie;
-                let displayTitle = details.title;
-                if (displayTitle && displayTitle.length > 22) {
-                  displayTitle = displayTitle.slice(0, 19) + "...";
-                }
-                return (
-                  <div
-                    key={movie.id}
-                    className="flex-shrink-0"
-                    style={{ width: 220 }}
-                  >
-                    <CardSmall
-                      {...details}
-                      title={displayTitle}
-                      image={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                      fullScreen={false}
-                      useImg={true}
-                      onClick={() => {
-                        setSelectedMovie(movie);
-                        setIsMovieModalVisible(true);
-                      }}
-                      onAdd={onAddToMyList}
-                      myListGlobal={myListGlobal}
-                    />
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </section>
+      {isOverlayVisible && (
+        <SearchOverlay
+          searchTerm={searchTerm}
+          movies={searchedMovies}
+          cardDetPop={cardDetPop}
+          onAddToMyList={onAddToMyList ?? (() => {})}
+          myListGlobal={myListGlobal ?? []}
+          onClose={() => {
+            setIsOverlayVisible(false);
+            setSearchTerm("");
+            setSearchedMovies([]);
+          }}
+        />
       )}
       <Modal
         isOpen={isMovieModalVisible}

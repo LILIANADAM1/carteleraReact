@@ -1,9 +1,22 @@
 import React, { useState } from "react";
-import { ButtonFavorite } from "../../../index.js";
+import { ButtonFavorite } from "../../../index";
 import { useLocation } from "react-router-dom";
-import AddToListButton from "../AddToListButton/AddToListButton.jsx";
+import AddToListButton from "../AddToListButton/AddToListButton";
+import { Movie } from "src/api-thmdb/apiMetodos";
 
-const CardSmall = ({
+interface CardSmallProps {
+  image?: string;
+  title: string;
+  content?: string;
+  onClick: () => void;
+  fullScreen?: boolean;
+  useImg?: boolean;
+  onAdd?: (updatedList: Movie[]) => void;
+  myListGlobal?: any;
+  [key: string]: any;
+}
+
+const CardSmall: React.FC<CardSmallProps> = ({
   image,
   title,
   content,
@@ -21,13 +34,15 @@ const CardSmall = ({
   });
 
   const toggleFavorite = () => {
-    setIsFavorite((prev) => {
-      const favs = JSON.parse(localStorage.getItem("favorites") || "[]");
-      let updated;
+    setIsFavorite((prev: boolean): boolean => {
+      const favs: string[] = JSON.parse(
+        localStorage.getItem("favorites") || "[]"
+      );
+      let updated: string[];
       if (!prev) {
         updated = [...favs, title];
       } else {
-        updated = favs.filter((t) => t !== title);
+        updated = favs.filter((t: string) => t !== title);
       }
       localStorage.setItem("favorites", JSON.stringify(updated));
       return !prev;
@@ -58,14 +73,14 @@ const CardSmall = ({
         {/* Botones solo en perfil y no fullScreen */}
         {!fullScreen && isProfilePage && (
           <>
-            <div className="w-full flex items-center justify-between gap-2 mt-2 mb-2 pb-2 relative">
-              <div className="absolute left-0 right-0 bottom-0 top-0 w-full h-full bg-black/20 rounded-xl z-0 pointer-events-none" />
+            <div className="w-full flex items-center justify-between gap-2 mt-2 top-4 relative">
+              <div className="absolute left-0 right-0 bottom-0 top-0 w-full h-full bg-white/20 rounded-xl z-0 pointer-events-none" />
               <ButtonFavorite
                 isFavorite={isFavorite}
                 onToggle={toggleFavorite}
               />
               <button
-                className="rounded-full bg-black text-white font-bold transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 mx-1 flex items-center justify-center"
+                className="rounded-full bg-black text-white font-bold transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 hover:border-white mx-1 flex items-center justify-center"
                 onClick={(e) => {
                   e.stopPropagation();
                   onClick();
@@ -78,7 +93,6 @@ const CardSmall = ({
                   minHeight: 40,
                   padding: 0,
                 }}
-                aria-label="Más información"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -118,10 +132,16 @@ const CardSmall = ({
                 onClick={(e) => e.stopPropagation()}
               >
                 <AddToListButton
-                  movie={{ image, title, content, ...props }}
+                  movie={{
+                    id: props.id ?? title,
+                    image,
+                    title,
+                    content,
+                    ...props,
+                  }}
                   onAdd={onAdd}
                   myListGlobal={props.myListGlobal}
-                  buttonClassName="rounded-full bg-black text-white font-bold transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 mx-1 flex items-center justify-center"
+                  buttonClassName="rounded-full bg-black text-white font-bold transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 hover:border-white mx-1 flex items-center justify-center"
                 />
               </div>
             </div>

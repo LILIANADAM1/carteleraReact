@@ -1,6 +1,28 @@
 import React, { useState } from "react";
-import { ButtonCarrusel, CardSmall } from "../../../index.js";
+import { ButtonCarrusel, CardSmall } from "../../../index";
 import Modal from "../Modal/Modal";
+
+// Definir el tipo Movie localmente
+interface Movie {
+  id: number;
+  title: string;
+  poster_path?: string;
+  overview?: string;
+  rating?: string;
+  certification?: string;
+  classification?: string;
+  genres?: string[];
+}
+
+interface GenreCarouselProps {
+  genreName: string;
+  movies: Movie[];
+  carouselIndex: number;
+  setCarouselIndex: (index: number) => void;
+  cardDetPop: Movie[];
+  maxTitleLength?: number;
+  visibleCount?: number;
+}
 
 const GenreCarousel = ({
   genreName,
@@ -10,12 +32,11 @@ const GenreCarousel = ({
   cardDetPop,
   maxTitleLength = 22,
   visibleCount = 5,
-}) => {
+}: GenreCarouselProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  // Agrega estas funciones:
-  const openModal = (movie) => {
+  const openModal = (movie: Movie) => {
     setSelectedMovie(movie);
     setIsModalOpen(true);
   };
@@ -95,9 +116,16 @@ const GenreCarousel = ({
                 <CardSmall
                   {...cardData}
                   title={displayTitle}
+                  image={
+                    cardData.poster_path
+                      ? `https://image.tmdb.org/t/p/original${cardData.poster_path}`
+                      : ""
+                  }
+                  content={cardData.overview || ""}
                   fullScreen={false}
                   useImg={true}
                   onClick={() => openModal(cardData)}
+                  onAdd={() => {}}
                 />
               </div>
             );
@@ -111,7 +139,24 @@ const GenreCarousel = ({
         />
       </div>
       {/* Modal para mostrar detalles de la película */}
-      <Modal isOpen={isModalOpen} onClose={closeModal} data={selectedMovie} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        data={
+          selectedMovie
+            ? {
+                title: selectedMovie.title,
+                image: selectedMovie.poster_path
+                  ? `https://image.tmdb.org/t/p/original${selectedMovie.poster_path}`
+                  : "",
+                content: selectedMovie.overview || "",
+              }
+            : undefined
+        }
+      >
+        {/* children vacío para cumplir con la firma */}
+        <></>
+      </Modal>
     </div>
   );
 };

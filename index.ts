@@ -10,4 +10,4 @@ export { default as GenreCarousel } from "./src/components/GenreCarousel/GenreCa
 export { default as Modal } from "./src/components/Modal/Modal";
 export { default as GenreSelect } from "./src/components/GenreSelect/GenreSelect";
 export { default as ButtonFavorite } from "./src/components/ButtonFavorite/ButtonFavorite";
-export { default } from "./src/components/Profile/Profile.jsx";
+export { default } from "./src/components/Profile/Profile";

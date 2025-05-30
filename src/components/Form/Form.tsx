@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Form = ({ onSubmit }) => {
+interface FormProps {
+  onSubmit?: (data: {
+    nombre: string;
+    email: string;
+    password: string;
+  }) => void;
+}
+
+const Form: React.FC<FormProps> = ({ onSubmit }) => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -9,7 +17,15 @@ const Form = ({ onSubmit }) => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  interface FormData {
+    nombre: string;
+    email: string;
+    password: string;
+  }
+
+  interface HandleSubmitEvent extends React.FormEvent<HTMLFormElement> {}
+
+  const handleSubmit = (e: HandleSubmitEvent) => {
     e.preventDefault();
     if (!nombre || !email || !password) {
       setError("Por favor, completa todos los campos.");
@@ -24,16 +40,27 @@ const Form = ({ onSubmit }) => {
     navigate("/profile");
   };
 
-  const handleChange = (setter) => (e) => {
-    setter(e.target.value);
-    setError("");
-    setSuccess("");
-  };
+  interface ChangeEventHandler {
+    (e: React.ChangeEvent<HTMLInputElement>): void;
+  }
+
+  interface Setter<T> {
+    (value: T): void;
+  }
+
+  const handleChange =
+    (setter: Setter<string>): ChangeEventHandler =>
+    (e) => {
+      setter(e.target.value);
+      setError("");
+      setSuccess("");
+    };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex flex-col gap-8 w-full h-full max-w-xl mx-auto border border-neutral-800"
+      className="bg-neutral-900 shadow-2xl rounded-3xl px-16 pt-14 pb-16 mb-4 flex flex-col gap-8 w-full h-full max-w-xl mx-auto border border-neutral-800 min-h-0 flex-1"
+      style={{ height: "100%" }}
     >
       <h2 className="text-2xl font-bold text-white text-center mb-2">
         Iniciar Sesión
