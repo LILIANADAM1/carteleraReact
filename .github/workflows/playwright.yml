@@ -16,7 +16,7 @@ jobs:
       - name: Instalar dependencias WebKit y xvfb
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev xvfb
+          sudo apt-get install -y libgtk-3-dev xvfb
       - name: Iniciar xvfb
         run: |
           nohup Xvfb :99 -screen 0 1024x768x16 &
@@ -24,7 +24,7 @@ jobs:
       - name: Instalar dependencias npm
         run: npm ci
       - name: Instalar navegadores Playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium firefox
       - name: Ejecutar tests Playwright
         run: npx playwright test
       - uses: actions/upload-artifact@v4
