@@ -26,7 +26,7 @@ jobs:
       - name: Instalar navegadores Playwright
         run: npx playwright install chromium firefox
       - name: Ejecutar tests Playwright
-        run: npx playwright test
+        run: xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24' npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
