@@ -11,7 +11,6 @@ interface Movie {
   release_date?: string;
   vote_average?: number;
   genres?: any[];
-  cast?: any[];
 }
 
 interface GenreCarouselProps {
@@ -153,7 +152,6 @@ const GenreCarousel = ({
                 release_date: selectedMovie.release_date,
                 vote_average: selectedMovie.vote_average,
                 genres: selectedMovie.genres,
-                cast: selectedMovie.cast,
               }
             : undefined
         }
