@@ -1,5 +1,5 @@
 import React from "react";
-import MovieSearch from "../MovieSearch/MovieSearch.jsx";
+import MovieSearch from "../MovieSearch/MovieSearch";
 
 type NavItem = {
   href: string;

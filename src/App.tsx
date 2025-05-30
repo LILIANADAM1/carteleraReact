@@ -1,15 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Head, Footer, Modal } from "../index.js";
-import MainContent from "./components/MainContent/MainContent.jsx";
-import { getInitialData } from "./config/initialData.js";
-import Form from "./components/Form/Form.jsx";
+import { Head, Footer, Modal } from "../index";
+import MainContent from "./components/MainContent/MainContent";
+import { getInitialData } from "./config/initialData";
+import Form from "./components/Form/Form";
 
-function App(props) {
-  const [initialData, setInitialData] = useState(null);
+// Define CardDetail type if not imported from elsewhere
+interface CardDetail {
+  // Add the properties that CardDetail should have, for example:
+  id: number;
+  title: string;
+  // Add other fields as needed based on your data structure
+}
+
+interface AppProps {
+  // Define any props you expect here, or leave empty if none
+}
+
+interface InitialData {
+  navItems: { href: string; label: string }[];
+  footerItems: { href: string; label: string }[];
+  cardsTrend: any;
+  cardsPopular: any;
+  cardDetails: CardDetail[]; // Or CardDetailTrend[] if that's the correct type
+  cardDetPop: CardDetail[];
+  // Add other fields as needed based on your data structure
+  SEARCH_API: string;
+  genresList: any; // Update 'any' to the correct type if available
+  popularByGenre: any; // Update 'any' to the correct type if available
+}
+
+function App(props: AppProps) {
+  const [initialData, setInitialData] = useState<InitialData | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchApi, setSearchApi] = useState("");
-  const [cardDetPop, setCardDetPop] = useState([]);
+  const [cardDetPop, setCardDetPop] = useState<CardDetail[]>([]);
 
   useEffect(() => {
     getInitialData().then((data) => {
@@ -33,14 +58,7 @@ function App(props) {
     <div className="bg-black min-h-screen text-gray-900 flex flex-col">
       <Head
         logo="./src/assets/react.png"
-        title={
-          <a
-            href="/"
-            className="text-2xl font-bold text-red-500 hover:text-red-300 transition cursor-pointer"
-          >
-            Movies React
-          </a>
-        }
+        title="Movies React"
         navClassName="flex gap-4 justify-center mb-4"
         navItems={initialData?.navItems}
         onNavClick={handleLoginClick}
@@ -52,7 +70,13 @@ function App(props) {
         SEARCH_API={searchApi}
         cardDetPop={cardDetPop}
       />
-      <MainContent {...initialData} {...props} searchTerm={searchTerm} />
+      <MainContent
+        {...initialData}
+        {...props}
+        searchTerm={searchTerm}
+        genresList={initialData.genresList}
+        popularByGenre={initialData.popularByGenre}
+      />
       <Footer>
         &copy; {new Date().getFullYear()} Mi Sitio Web. Todos los derechos
         reservados.

@@ -1,5 +1,5 @@
-import React from 'react';
-import CardSmall from '../CardSmall/CardSmall.jsx';
+import React from "react";
+import CardSmall from "../CardSmall/CardSmall";
 
 interface SearchOverlayProps {
   searchTerm: string;
@@ -29,14 +29,11 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
             placeholder="Buscar películas en el catálogo..."
             className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full text-black pr-16"
           />
-          <button
-            onClick={onClose}
-            className="text-white hover:text-gray-300"
-          >
+          <button onClick={onClose} className="text-white hover:text-gray-300">
             ×
           </button>
         </div>
-        
+
         <div className="w-full h-[calc(100vh-100px)] overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {movies.length === 0 ? (

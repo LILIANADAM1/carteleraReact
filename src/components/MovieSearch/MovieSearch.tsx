@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../Modal/Modal.jsx";
+import Modal from "../Modal/Modal";
 import SearchOverlay from "./SearchOverlay";
-import CardSmall from "../CardSmall/CardSmall.jsx";
 
 interface MovieSearchProps {
   SEARCH_API: string;

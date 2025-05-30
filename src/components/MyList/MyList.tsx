@@ -44,9 +44,9 @@ const MyList = () => {
                 {...movie}
                 fullScreen={false}
                 useImg={true}
-                onAdd={(updatedList: Movie[]) => setMyList(updatedList)}
-                myListGlobal={myList}
+                onAdd={() => {}}
                 onClick={() => {}}
+                myListGlobal={myList}
               />
               <button
                 onClick={() => handleRemove(movie.id)}
