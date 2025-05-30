@@ -147,3 +147,33 @@ export async function fetchMoviesByGenre(
   const data: MoviesByGenreResponse = await res.json();
   return data.results;
 }
+
+export interface CastMember {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+
+export async function fetchMovieCredits(
+  movieId: number
+): Promise<{ cast: CastMember[] }> {
+  const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
+  try {
+    const response = await fetch(
+      `${BASE_URL}/movie/${movieId}/credits?api_key=${LOCAL_API_KEY}&language=es-ES`
+    );
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching movie credits:", error);
+    throw error;
+  }
+}
