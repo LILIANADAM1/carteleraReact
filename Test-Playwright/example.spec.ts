@@ -16,3 +16,10 @@ test('get started link', async ({ page }) => {
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
+
+test('mostrar genero aventura', async ({ page }) => {
+  await page.goto('http://localhost:5173/carteleraReact/'); 
+  await page.getByRole('combobox').selectOption('Aventura');
+  await page.pause();
+});
