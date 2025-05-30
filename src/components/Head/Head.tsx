@@ -1,7 +1,26 @@
 import React from "react";
 import MovieSearch from "../MovieSearch/MovieSearch.jsx";
 
-const Head = ({
+type NavItem = {
+  href: string;
+  label: string;
+};
+
+type HeadProps = {
+  logo?: string;
+  title: string;
+  subtitle?: string;
+  navItems?: NavItem[];
+  navClassName?: string;
+  onNavClick?: (href: string) => void;
+  onSearch?: (query: string) => void;
+  onTitleClick?: () => void;
+  showSearch?: boolean;
+  SEARCH_API?: string;
+  cardDetPop?: any[];
+};
+
+const Head: React.FC<HeadProps> = ({
   logo,
   title,
   subtitle,
@@ -28,7 +47,7 @@ const Head = ({
           {showSearch && (
             <div className="w-96">
               <MovieSearch
-                SEARCH_API={SEARCH_API}
+                SEARCH_API={SEARCH_API ?? ""}
                 cardDetPop={cardDetPop}
                 placeholder="Buscar películas..."
                 autoFocus={false}

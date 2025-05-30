@@ -43,7 +43,48 @@ export async function fetchTrendingMovies() {
   }
 }
 
-export async function fetchMovieDetails(movieId) {
+export interface MovieDetails {
+  adult: boolean;
+  backdrop_path: string | null;
+  belongs_to_collection?: object | null;
+  budget: number;
+  genres: { id: number; name: string }[];
+  homepage?: string;
+  id: number;
+  imdb_id?: string;
+  original_language: string;
+  original_title: string;
+  overview: string | null;
+  popularity: number;
+  poster_path: string | null;
+  production_companies?: {
+    id: number;
+    logo_path: string | null;
+    name: string;
+    origin_country: string;
+  }[];
+  production_countries?: {
+    iso_3166_1: string;
+    name: string;
+  }[];
+  release_date: string;
+  revenue?: number;
+  runtime: number | null;
+  spoken_languages?: {
+    iso_639_1: string;
+    name: string;
+  }[];
+  status?: string;
+  tagline?: string;
+  title: string;
+  video?: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export async function fetchMovieDetails(
+  movieId: number
+): Promise<MovieDetails> {
   const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
   try {
     const response = await fetch(
@@ -72,10 +113,37 @@ export async function fetchMovieGenres() {
 }
 
 // Obtener películas por género
-export async function fetchMoviesByGenre(genreId, page = 1) {
+export interface Movie {
+  adult: boolean;
+  backdrop_path: string | null;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string | null;
+  popularity: number;
+  poster_path: string | null;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface MoviesByGenreResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export async function fetchMoviesByGenre(
+  genreId: number,
+  page: number = 1
+): Promise<Movie[]> {
   const API_KEY = import.meta.env.VITE_API_KEY;
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&language=es-ES&page=${page}`;
   const res = await fetch(url);
-  const data = await res.json();
+  const data: MoviesByGenreResponse = await res.json();
   return data.results;
 }

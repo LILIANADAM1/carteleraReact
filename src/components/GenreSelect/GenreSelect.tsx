@@ -1,6 +1,21 @@
 import React from "react";
 
-function GenreSelect({ genresList, selectedGenre, onChange }) {
+// Define the Genre type if not imported from elsewhere
+type Genre = {
+  name: string;
+};
+
+interface GenreSelectProps {
+  genresList: Genre[];
+  selectedGenre: string;
+  onChange: (genre: string[]) => void;
+}
+
+function GenreSelect({
+  genresList,
+  selectedGenre,
+  onChange,
+}: GenreSelectProps) {
   return (
     <div className="flex justify-center my-6">
       <select
@@ -12,7 +27,7 @@ function GenreSelect({ genresList, selectedGenre, onChange }) {
         <option value="" disabled>
           Selecciona un género
         </option>
-        {genresList.map((genre) => (
+        {genresList.map((genre: Genre) => (
           <option key={genre.name} value={genre.name}>
             {genre.name}
           </option>

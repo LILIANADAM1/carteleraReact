@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CardSmall from "../CardSmall/CardSmall.jsx";
+import CardSmall from "../CardSmall/CardSmall";
 
 const MyList = () => {
-  const [myList, setMyList] = useState([]);
+  interface Movie {
+    id: string | number;
+    title: string;
+    [key: string]: any;
+  }
+  const [myList, setMyList] = useState<Movie[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedList = JSON.parse(localStorage.getItem("myList") || "[]");
-    setMyList(storedList);
-  }, []);
-
   // Permite quitar películas de la lista
-  const handleRemove = (id) => {
-    const updatedList = myList.filter((movie) => movie.id !== id);
+
+  const handleRemove = (id: string | number) => {
+    const updatedList = myList.filter((movie: Movie) => movie.id !== id);
     setMyList(updatedList);
     localStorage.setItem("myList", JSON.stringify(updatedList));
   };
@@ -43,8 +44,9 @@ const MyList = () => {
                 {...movie}
                 fullScreen={false}
                 useImg={true}
-                onAdd={(updatedList) => setMyList(updatedList)}
+                onAdd={(updatedList: Movie[]) => setMyList(updatedList)}
                 myListGlobal={myList}
+                onClick={() => {}}
               />
               <button
                 onClick={() => handleRemove(movie.id)}

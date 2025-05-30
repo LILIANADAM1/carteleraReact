@@ -3,7 +3,16 @@ import Modal from "../Modal/Modal.jsx";
 import SearchOverlay from "./SearchOverlay";
 import CardSmall from "../CardSmall/CardSmall.jsx";
 
-const MovieSearch = ({
+interface MovieSearchProps {
+  SEARCH_API: string;
+  cardDetPop?: any[];
+  onAddToMyList?: (movie: any) => void;
+  myListGlobal?: any[];
+  placeholder?: string;
+  autoFocus?: boolean;
+}
+
+const MovieSearch: React.FC<MovieSearchProps> = ({
   SEARCH_API,
   cardDetPop = [],
   onAddToMyList,
@@ -13,7 +22,13 @@ const MovieSearch = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedMovies, setSearchedMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  interface Movie {
+    title: string;
+    poster_path: string;
+    overview: string;
+    // Add other properties as needed
+  }
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
 
@@ -93,8 +108,8 @@ const MovieSearch = ({
           searchTerm={searchTerm}
           movies={searchedMovies}
           cardDetPop={cardDetPop}
-          onAddToMyList={onAddToMyList}
-          myListGlobal={myListGlobal}
+          onAddToMyList={onAddToMyList ?? (() => {})}
+          myListGlobal={myListGlobal ?? []}
           onClose={() => {
             setIsOverlayVisible(false);
             setSearchTerm("");

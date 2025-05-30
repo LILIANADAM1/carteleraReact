@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 
-const AddToListButton = ({ movie, onAdd, myListGlobal, buttonClassName }) => {
+type AddToListButtonProps = {
+  movie: { id: string | number; [key: string]: any };
+  onAdd?: (myList: any[]) => void;
+  myListGlobal?: any[];
+  buttonClassName?: string;
+};
+
+const AddToListButton: React.FC<AddToListButtonProps> = ({
+  movie,
+  onAdd,
+  myListGlobal,
+  buttonClassName,
+}) => {
   const [inList, setInList] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -8,7 +20,9 @@ const AddToListButton = ({ movie, onAdd, myListGlobal, buttonClassName }) => {
   useEffect(() => {
     const myList =
       myListGlobal || JSON.parse(localStorage.getItem("myList") || "[]");
-    setInList(myList.some((item) => item.id === movie.id));
+    setInList(
+      myList.some((item: { id: string | number }) => item.id === movie.id)
+    );
   }, [movie.id, myListGlobal]);
 
   // Maneja agregar a la lista (solo agregar, no quitar)
@@ -30,12 +44,7 @@ const AddToListButton = ({ movie, onAdd, myListGlobal, buttonClassName }) => {
   return (
     <button
       onClick={handleClick}
-      className={
-        (buttonClassName ||
-          `px-3 py-1 rounded ${
-            inList ? "bg-red-500" : "bg-green-500"
-          } text-white mt-2`) + (animate ? " scale-110" : "")
-      }
+      className={buttonClassName + (animate ? " scale-110" : "")}
       aria-label={inList ? "En mi lista" : "Agregar a mi lista"}
       type="button"
       style={{

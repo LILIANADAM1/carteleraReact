@@ -139,7 +139,21 @@ const GenreCarousel = ({
         />
       </div>
       {/* Modal para mostrar detalles de la película */}
-      <Modal isOpen={isModalOpen} onClose={closeModal} data={selectedMovie}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        data={
+          selectedMovie
+            ? {
+                title: selectedMovie.title,
+                image: selectedMovie.poster_path
+                  ? `https://image.tmdb.org/t/p/original${selectedMovie.poster_path}`
+                  : "",
+                content: selectedMovie.overview || "",
+              }
+            : undefined
+        }
+      >
         {/* children vacío para cumplir con la firma */}
         <></>
       </Modal>

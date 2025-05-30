@@ -1,6 +1,17 @@
 import React from "react";
 
-const Modal = ({ isOpen, onClose, data, children }) => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  data?: {
+    title: string;
+    image: string;
+    content: string;
+  };
+  children?: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, data, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -32,12 +43,10 @@ const Modal = ({ isOpen, onClose, data, children }) => {
 
             {/* Descripción de la película */}
             <p className="text-gray-700 text-lg mb-4">{data.content}</p>
-
-           
           </>
         ) : (
           // Renderizar contenido pasado como children (por ejemplo, el formulario)
-          <div style={{ display: 'contents' }}>{children}</div>
+          <div style={{ display: "contents" }}>{children}</div>
         )}
       </div>
     </div>

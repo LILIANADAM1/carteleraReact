@@ -1,12 +1,20 @@
 import React from "react";
 
+type ButtonCarruselProps = {
+  direction?: "left" | "right";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+  className?: string;
+  [key: string]: any;
+};
+
 const ButtonCarrusel = ({
   direction = "left",
   onClick,
   disabled,
   className = "",
   ...props
-}) => {
+}: ButtonCarruselProps) => {
   const isLeft = direction === "left";
   return (
     <button

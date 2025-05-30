@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Form = ({ onSubmit }) => {
+interface FormProps {
+  onSubmit?: (data: {
+    nombre: string;
+    email: string;
+    password: string;
+  }) => void;
+}
+
+const Form: React.FC<FormProps> = ({ onSubmit }) => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -9,7 +17,15 @@ const Form = ({ onSubmit }) => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  interface FormData {
+    nombre: string;
+    email: string;
+    password: string;
+  }
+
+  interface HandleSubmitEvent extends React.FormEvent<HTMLFormElement> {}
+
+  const handleSubmit = (e: HandleSubmitEvent) => {
     e.preventDefault();
     if (!nombre || !email || !password) {
       setError("Por favor, completa todos los campos.");
@@ -24,11 +40,21 @@ const Form = ({ onSubmit }) => {
     navigate("/profile");
   };
 
-  const handleChange = (setter) => (e) => {
-    setter(e.target.value);
-    setError("");
-    setSuccess("");
-  };
+  interface ChangeEventHandler {
+    (e: React.ChangeEvent<HTMLInputElement>): void;
+  }
+
+  interface Setter<T> {
+    (value: T): void;
+  }
+
+  const handleChange =
+    (setter: Setter<string>): ChangeEventHandler =>
+    (e) => {
+      setter(e.target.value);
+      setError("");
+      setSuccess("");
+    };
 
   return (
     <form

@@ -2,11 +2,39 @@ import React, { useState, useRef } from "react";
 import {
   GenreSelect,
   CardSmall,
-  ButtonCarrusel,
   GenreCarousel,
   Modal,
 } from "../../../index.js";
-import CardTrending from "../CardTrending/CardTrending.jsx";
+import CardTrending from "../CardTrending/CardTrending";
+
+// Tipos explícitos
+interface Movie {
+  id: number;
+  title: string;
+  poster_path?: string;
+  overview?: string;
+  rating?: string;
+  certification?: string;
+  classification?: string;
+  genres?: string[];
+  [key: string]: any;
+}
+
+interface MainContentProps {
+  cardDetails: Movie[];
+  genresList: string[];
+  popularByGenre: { [genre: string]: Movie[] };
+  initialGenres?: string[];
+  SEARCH_API: string;
+  cardDetPop: Movie[];
+  continueWatching?: Movie[];
+  isKidsProfile?: boolean;
+  searchTerm?: string;
+  myListGlobal?: any;
+  onAddToMyList?: (movie: Movie) => void;
+  selectedGenres?: string[];
+  setSelectedGenres?: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
 const MainContent = ({
   cardDetails,
@@ -15,50 +43,43 @@ const MainContent = ({
   initialGenres = [],
   SEARCH_API,
   cardDetPop,
-  continueWatching,
-  isKidsProfile,
+  continueWatching = [],
+  isKidsProfile = false,
   searchTerm = "",
   myListGlobal,
-  onAddToMyList,
-  selectedGenres,
-  setSelectedGenres,
-}) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [transition, setTransition] = useState(0);
-  const [carouselIndexes, setCarouselIndexes] = useState({});
-  const [searchedMovies, setSearchedMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
-  const searchResultsRef = useRef(null);
+  onAddToMyList = () => {},
+  selectedGenres = [],
+  setSelectedGenres = () => {},
+}: MainContentProps) => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [transition, setTransition] = useState<number>(0);
+  const [carouselIndexes, setCarouselIndexes] = useState<{
+    [key: string]: number;
+  }>({});
+  const [searchedMovies, setSearchedMovies] = useState<Movie[]>([]);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [isMovieModalVisible, setIsMovieModalVisible] =
+    useState<boolean>(false);
+  const searchResultsRef = useRef<HTMLDivElement | null>(null);
 
   // Filtrar contenido infantil
-  const filterKidsContent = (movies) => {
-    if (!isKidsProfile) return movies; // Si no es perfil infantil, mostrar todo
-
-    const allowedRatings = ["G", "PG"]; // Clasificaciones aptas para niños
-    const allowedGenres = ["Animación", "Familia", "Infantil"]; // Géneros aptos para niños
-
-    return movies.filter((movie) => {
-      // Verificar clasificación
+  const filterKidsContent = (movies: Movie[]): Movie[] => {
+    if (!isKidsProfile) return movies;
+    const allowedRatings = ["G", "PG"];
+    const allowedGenres = ["Animación", "Familia", "Infantil"];
+    return movies.filter((movie: Movie) => {
       const rating =
         movie.rating || movie.certification || movie.classification;
-      if (rating && allowedRatings.includes(rating)) {
-        return true;
-      }
-
-      // Verificar género
+      if (rating && allowedRatings.includes(rating)) return true;
       const genres = movie.genres || [];
-      if (genres.some((genre) => allowedGenres.includes(genre))) {
+      if (genres.some((genre: string) => allowedGenres.includes(genre)))
         return true;
-      }
-
-      // Si no cumple con ninguna condición, excluir la película
       return false;
     });
   };
 
-  const handleGenreChange = (genreName) => {
-    setSelectedGenres((prev) =>
+  const handleGenreChange = (genreName: string) => {
+    setSelectedGenres((prev: string[]) =>
       prev.includes(genreName)
         ? prev.filter((g) => g !== genreName)
         : [...prev, genreName]
@@ -97,7 +118,7 @@ const MainContent = ({
       const data = await res.json();
       if (!ignore && data.results) {
         setTimeout(() => {
-          setSearchedMovies(data.results);
+          setSearchedMovies(data.results as Movie[]);
         }, 2);
       }
     }
@@ -105,7 +126,19 @@ const MainContent = ({
     return () => {
       ignore = true;
     };
-  }, [searchTerm]);
+  }, [searchTerm, SEARCH_API]);
+
+  // Movimiento automático del carrusel
+  React.useEffect(() => {
+    if (searchTerm.trim() !== "") return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) =>
+        prev === cardDetails.length - 1 ? 0 : prev + 1
+      );
+      setTransition(0); // Reinicia la transición
+    }, 4000); // 4 segundos
+    return () => clearInterval(interval);
+  }, [cardDetails.length, searchTerm]);
 
   return (
     <main className="p-0 flex-1">
@@ -113,6 +146,17 @@ const MainContent = ({
       <Modal
         isOpen={isMovieModalVisible}
         onClose={() => setIsMovieModalVisible(false)}
+        data={
+          selectedMovie
+            ? {
+                title: selectedMovie.title,
+                image: selectedMovie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}`
+                  : "",
+                content: selectedMovie.overview || "",
+              }
+            : undefined
+        }
       >
         {selectedMovie && (
           <div className="p-6">
@@ -120,7 +164,7 @@ const MainContent = ({
             <img
               src={`https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}`}
               alt={selectedMovie.title}
-              className="w-full h-96 object-cover mb-4 rounded-lg"
+              className="w-full max-w-xs h-72 object-cover mb-4 rounded-lg mx-auto"
             />
             <p className="text-gray-600">{selectedMovie.overview}</p>
           </div>
@@ -131,7 +175,7 @@ const MainContent = ({
         <section className="m-0 w-screen h-screen relative overflow-hidden">
           <div className="w-screen h-screen flex items-center justify-center">
             <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
-              <ButtonCarrusel direction="left" onClick={goToPrev} />
+              {/* Carrusel automático, sin botones */}
               <div
                 className={
                   "w-screen h-screen flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] " +
@@ -145,11 +189,17 @@ const MainContent = ({
                 <CardTrending
                   key={currentIndex}
                   {...cardDetails[currentIndex]}
+                  image={
+                    cardDetails[currentIndex]?.poster_path
+                      ? `url(https://image.tmdb.org/t/p/original${cardDetails[currentIndex].poster_path})`
+                      : ""
+                  }
+                  content={cardDetails[currentIndex]?.overview || ""}
+                  onClick={() => {}}
                   fullScreen
                   useImg={false}
                 />
               </div>
-              <ButtonCarrusel direction="right" onClick={goToNext} />
             </div>
           </div>
         </section>
@@ -165,9 +215,9 @@ const MainContent = ({
                 No se encontraron resultados.
               </p>
             ) : (
-              searchedMovies.map((movie) => {
+              searchedMovies.map((movie: Movie) => {
                 const details =
-                  cardDetPop.find((c) => c.id === movie.id) || movie;
+                  cardDetPop.find((c: Movie) => c.id === movie.id) || movie;
                 let displayTitle = details.title;
                 if (displayTitle && displayTitle.length > 22) {
                   displayTitle = displayTitle.slice(0, 19) + "...";
@@ -182,13 +232,14 @@ const MainContent = ({
                       {...details}
                       title={displayTitle}
                       image={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                      content={details.overview || ""}
                       fullScreen={false}
                       useImg={true}
                       onClick={() => {
                         setSelectedMovie(movie);
                         setIsMovieModalVisible(true);
                       }}
-                      onAdd={onAddToMyList}
+                      onAdd={() => onAddToMyList(movie)}
                       myListGlobal={myListGlobal}
                     />
                   </div>
@@ -205,10 +256,10 @@ const MainContent = ({
             {continueWatching && continueWatching.length > 0 && (
               <GenreCarousel
                 genreName="Seguir viendo"
-                movies={filterKidsContent(continueWatching)} // Aplicar filtro
+                movies={filterKidsContent(continueWatching)}
                 carouselIndex={carouselIndexes["Seguir viendo"] || 0}
-                setCarouselIndex={(newIndex) =>
-                  setCarouselIndexes((prev) => ({
+                setCarouselIndex={(newIndex: number) =>
+                  setCarouselIndexes((prev: { [key: string]: number }) => ({
                     ...prev,
                     "Seguir viendo": newIndex,
                   }))
@@ -223,12 +274,12 @@ const MainContent = ({
             {(selectedGenres && selectedGenres.length > 0
               ? selectedGenres
               : Object.keys(popularByGenre).slice(0, 3) || []
-            ).map((genreName) => {
+            ).map((genreName: string) => {
               const movies = filterKidsContent(popularByGenre[genreName] || []);
               if (!movies.length) return null;
               const carouselIndex = carouselIndexes[genreName] || 0;
-              const setCarouselIndex = (newIndex) => {
-                setCarouselIndexes((prev) => ({
+              const setCarouselIndex = (newIndex: number) => {
+                setCarouselIndexes((prev: { [key: string]: number }) => ({
                   ...prev,
                   [genreName]: newIndex,
                 }));

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MainContent from "../MainContent/MainContent.jsx";
-import CardSmall from "../CardSmall/CardSmall.jsx"; // Asegúrate de importar CardSmall
-import { getInitialData } from "../../config/initialData.js";
-import MovieSearch from "../MovieSearch/MovieSearch.jsx";
+import MainContent from "../MainContent/MainContent";
+import CardSmall from "../CardSmall/CardSmall"; // Asegúrate de importar CardSmall
+import { getInitialData } from "../../config/initialData";
+import MovieSearch from "../MovieSearch/MovieSearch";
 import GenreSelect from "../GenreSelect/GenreSelect";
 
 const Profile = () => {
@@ -193,7 +193,15 @@ const Profile = () => {
           <MovieSearch
             SEARCH_API={data.SEARCH_API}
             cardDetPop={data.cardDetPop}
-            onAddToMyList={setMyList}
+            onAddToMyList={(movie: any) => {
+              setMyList((prevList) => {
+                // Evita duplicados por id
+                if (prevList.some((m) => m.id === movie.id)) return prevList;
+                const updatedList = [...prevList, movie];
+                localStorage.setItem("myList", JSON.stringify(updatedList));
+                return updatedList;
+              });
+            }}
             myListGlobal={myList}
             placeholder="Buscar películas en el catálogo..."
           />
@@ -212,7 +220,15 @@ const Profile = () => {
           continueWatching={continueWatching}
           isKidsProfile={isKidsProfile}
           myListGlobal={myList}
-          onAddToMyList={setMyList}
+          onAddToMyList={(movie: any) => {
+            setMyList((prevList) => {
+              // Evita duplicados por id
+              if (prevList.some((m) => m.id === movie.id)) return prevList;
+              const updatedList = [...prevList, movie];
+              localStorage.setItem("myList", JSON.stringify(updatedList));
+              return updatedList;
+            });
+          }}
           selectedGenres={selectedGenres}
           setSelectedGenres={setSelectedGenres}
         />

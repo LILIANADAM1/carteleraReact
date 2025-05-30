@@ -1,6 +1,14 @@
 import React from "react";
 
-const ButtonFavorite = ({ isFavorite, onToggle }) => {
+interface ButtonFavoriteProps {
+  isFavorite: boolean;
+  onToggle: () => void;
+}
+
+const ButtonFavorite: React.FC<ButtonFavoriteProps> = ({
+  isFavorite,
+  onToggle,
+}) => {
   return (
     <button
       onClick={(e) => {
