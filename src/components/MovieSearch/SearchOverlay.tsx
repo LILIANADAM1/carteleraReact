@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CardSmall from "../CardSmall/CardSmall";
 import { FaPlay } from "react-icons/fa";
+import { fetchMovieCredits } from "../../api-thmdb/apiMetodos";
 
 interface SearchOverlayProps {
   searchTerm: string;
@@ -18,6 +19,8 @@ interface MovieDetails {
   title: string;
   genres?: any[];
   vote_average?: number;
+  release_date?: string;
+  cast?: any[];
 }
 
 const SearchOverlay: React.FC<SearchOverlayProps> = ({
@@ -30,16 +33,30 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
 }) => {
   const [selectedMovie, setSelectedMovie] = useState<MovieDetails | null>(null);
 
-  const handleMovieClick = (movie: any) => {
-    const details = cardDetPop.find((c) => c.id === movie.id) || movie;
-    setSelectedMovie({
-      id: details.id,
-      title: details.title,
-      image: `https://image.tmdb.org/t/p/original${details.poster_path}`,
-      content: details.overview,
-      genres: details.genres,
-      vote_average: details.vote_average,
-    });
+  const [loading, setLoading] = useState(false);
+
+  const handleMovieClick = async (movie: any) => {
+    setLoading(true);
+    try {
+      const details = cardDetPop.find((c) => c.id === movie.id) || movie;
+      const credits = await fetchMovieCredits(details.id);
+      
+      setSelectedMovie({
+        id: details.id,
+        title: details.title,
+        image: `https://image.tmdb.org/t/p/original${details.poster_path}`,
+        content: details.overview,
+        genres: details.genres,
+        vote_average: details.vote_average,
+        release_date: details.release_date,
+        cast: credits.cast,
+      });
+    } catch (error) {
+      console.error('Error fetching movie credits:', error);
+      setSelectedMovie(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCloseDetails = () => {
@@ -57,8 +74,8 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
             placeholder="Buscar películas en el catálogo..."
             className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full text-black pr-16"
           />
-          <button onClick={onClose} className="text-white hover:text-gray-300">
-            ×
+          <button onClick={onClose} className="text-white hover:text-gray-300 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700 transition-colors">
+            <span className="text-xl">×</span>
           </button>
         </div>
 
@@ -102,14 +119,14 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
         {selectedMovie && (
           <div className="fixed inset-0 bg-black bg-opacity-90 z-50">
             <div className="flex items-center justify-center min-h-screen">
-              <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="bg-white/50 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center p-4 border-b">
                   <h2 className="text-xl font-bold">{selectedMovie.title}</h2>
                   <button 
                     onClick={handleCloseDetails}
-                    className="text-gray-500 hover:text-gray-700"
+                    className="text-black hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
                   >
-                    ×
+                    <span className="text-xl">×</span>
                   </button>
                 </div>
                 <div className="p-4">
@@ -127,12 +144,12 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
                         />
                       ) : (
                         <div className="rounded-lg w-full h-64 bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-500">Sin imagen disponible</span>
+                          <span className="text-black">Sin imagen disponible</span>
                         </div>
                       )}
                     </div>
                     <div className="w-2/3 relative">
-                      <p className="text-gray-600 mb-4">{selectedMovie.content}</p>
+                      <p className="text-black mb-4">{selectedMovie.content}</p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {selectedMovie.genres?.map((genre: any) => (
                           <span
@@ -143,9 +160,32 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
                           </span>
                         ))}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold">Rating:</span>
-                        <span className="text-yellow-400">{selectedMovie.vote_average}</span>
+                      <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold">Año:</span>
+                          <span className="text-black">
+                            {selectedMovie.release_date ? selectedMovie.release_date.split('-')[0] : 'Sin fecha'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold">Rating:</span>
+                          <span className="text-black">{selectedMovie.vote_average}</span>
+                        </div>
+                        {selectedMovie.cast && selectedMovie.cast.length > 0 && (
+                          <div>
+                            <span className="font-bold block mb-2">Personajes principales:</span>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedMovie.cast.slice(0, 5).map((actor: any, index: number) => (
+                                <span
+                                  key={index}
+                                  className="bg-gray-100 px-2 py-1 rounded text-sm"
+                                >
+                                  {actor.name}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="absolute bottom-4 right-4">
                         <button 
