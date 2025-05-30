@@ -8,10 +8,10 @@ interface Movie {
   title: string;
   poster_path?: string;
   overview?: string;
-  rating?: string;
-  certification?: string;
-  classification?: string;
-  genres?: string[];
+  release_date?: string;
+  vote_average?: number;
+  genres?: any[];
+  cast?: any[];
 }
 
 interface GenreCarouselProps {
@@ -150,6 +150,10 @@ const GenreCarousel = ({
                   ? `https://image.tmdb.org/t/p/original${selectedMovie.poster_path}`
                   : "",
                 content: selectedMovie.overview || "",
+                release_date: selectedMovie.release_date,
+                vote_average: selectedMovie.vote_average,
+                genres: selectedMovie.genres,
+                cast: selectedMovie.cast,
               }
             : undefined
         }
