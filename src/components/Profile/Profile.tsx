@@ -118,13 +118,22 @@ const Profile = () => {
                   </li>
                   <li
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => navigate("/mylist")}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      const storedList = JSON.parse(localStorage.getItem("myList") || "[]");
+                      setMyList(storedList);
+                      setShowMyList(true);
+                      navigate("/profile");
+                    }}
                   >
                     Ver mi lista
                   </li>
                   <li
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={handleLogout}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleLogout();
+                    }}
                   >
                     Cerrar sesión
                   </li>
@@ -156,7 +165,8 @@ const Profile = () => {
                     {...movie}
                     fullScreen={false}
                     useImg={true}
-                    onAdd={(updatedList: any) => setMyList(updatedList)}
+                    onAdd={() => {}}
+                    onClick={() => {}}
                     myListGlobal={myList}
                   />
                   <button
@@ -178,34 +188,46 @@ const Profile = () => {
               ))}
             </div>
           )}
+          <button
+            onClick={() => setShowMyList(false)}
+            className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+          >
+            Volver al catálogo
+          </button>
         </section>
       ) : null}
 
-      <GenreSelect
-        genresList={genresList}
-        selectedGenre={selectedGenres[0] || ""}
-        onChange={(value: string[]) => setSelectedGenres(value)}
-      />
-
-      {/* Buscador de películas */}
-      {data && (
-        <div className="mb-8">
-          <MovieSearch
-            SEARCH_API={data.SEARCH_API}
-            cardDetPop={data.cardDetPop}
-            onAddToMyList={(movie: any) => {
-              setMyList((prevList) => {
-                // Evita duplicados por id
-                if (prevList.some((m) => m.id === movie.id)) return prevList;
-                const updatedList = [...prevList, movie];
-                localStorage.setItem("myList", JSON.stringify(updatedList));
-                return updatedList;
-              });
-            }}
-            myListGlobal={myList}
-            placeholder="Buscar películas en el catálogo..."
+      {/* Solo mostrar el selector de género y el buscador si NO se está mostrando Mi Lista */}
+      {!showMyList && (
+        <>
+          <GenreSelect
+            genresList={genresList}
+            selectedGenre={selectedGenres[0] || ""}
+            onChange={(value: string[]) => setSelectedGenres(value)}
           />
-        </div>
+
+          {/* Buscador de películas */}
+          {data && (
+            <div className="mb-8">
+              <MovieSearch
+                SEARCH_API={data.SEARCH_API}
+                cardDetPop={data.cardDetPop}
+                onAddToMyList={(movie: any) => {
+                  setMyList((prevList) => {
+                    // Evita duplicados por id
+                    if (prevList.some((m) => m.id === movie.id))
+                      return prevList;
+                    const updatedList = [...prevList, movie];
+                    localStorage.setItem("myList", JSON.stringify(updatedList));
+                    return updatedList;
+                  });
+                }}
+                myListGlobal={myList}
+                placeholder="Buscar películas en el catálogo..."
+              />
+            </div>
+          )}
+        </>
       )}
 
       {/* Contenido principal (catálogo) */}

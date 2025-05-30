@@ -1,10 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  GenreSelect,
-  CardSmall,
-  GenreCarousel,
-  Modal,
-} from "../../../index.js";
+import { GenreSelect, CardSmall, GenreCarousel, Modal } from "../../../index";
 import CardTrending from "../CardTrending/CardTrending";
 
 // Tipos explícitos
@@ -191,7 +186,7 @@ const MainContent = ({
                   {...cardDetails[currentIndex]}
                   image={
                     cardDetails[currentIndex]?.poster_path
-                      ? `url(https://image.tmdb.org/t/p/original${cardDetails[currentIndex].poster_path})`
+                      ? `url(https://image.tmdb.org/t/p/original${cardDetails[currentIndex].backdrop_path})`
                       : ""
                   }
                   content={cardDetails[currentIndex]?.overview || ""}
