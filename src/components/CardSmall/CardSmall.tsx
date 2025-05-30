@@ -58,7 +58,7 @@ const CardSmall = ({
         {/* Botones solo en perfil y no fullScreen */}
         {!fullScreen && isProfilePage && (
           <>
-            <div className="w-full flex items-center justify-between gap-2 mt-2 mb-2 pb-2 relative">
+            <div className="w-full flex items-center justify-between gap-2 mt-2 relative">
               <div className="absolute left-0 right-0 bottom-0 top-0 w-full h-full bg-black/20 rounded-xl z-0 pointer-events-none" />
               <ButtonFavorite
                 isFavorite={isFavorite}
@@ -78,7 +78,6 @@ const CardSmall = ({
                   minHeight: 40,
                   padding: 0,
                 }}
-                aria-label="Más información"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
