@@ -182,11 +182,10 @@ const Profile = () => {
           </>
         }
       />
-
       {/* Sección para mostrar Mi Lista */}
       {showMyList ? (
         <section className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Mi lista</h2>
+          <h2 className="text-2xl font-bold text-white mb-4 mt-32">Mi lista</h2>
           {myList.length === 0 ? (
             <p className="text-gray-400">
               No has agregado películas a tu lista.
@@ -237,6 +236,23 @@ const Profile = () => {
       ) : null}
 
       {/* Solo mostrar el selector de género y el buscador si NO se está mostrando Mi Lista */}
+      {!showMyList && (
+        <div className="relative w-full flex justify-center items-center">
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 z-30 w-full max-w-md flex justify-center">
+            <div className="bg-black/80 rounded-full px-6 py-2 text-white shadow-lg border border-white/10">
+              <GenreSelect
+                genresList={
+                  Array.isArray(data.genresList)
+                    ? data.genresList.filter((g: any) => g && g.name)
+                    : []
+                }
+                selectedGenre={selectedGenres[0] || ""}
+                onChange={(value: string[]) => setSelectedGenres(value)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Contenido principal (catálogo) */}
       {!showMyList && (
