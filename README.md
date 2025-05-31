@@ -1,144 +1,108 @@
-# Librería de Componentes React
+# Cartelera React
 
-Librería de 5 componentes reutilizables hecha en React con JavaScript.  
-Incluye ejemplos de uso, pruebas unitarias y estilos con Tailwind CSS.
+Cartelera React es una aplicación web inspirada en la experiencia de usuario de Netflix, desarrollada con React, TypeScript y Tailwind CSS. Permite explorar películas populares, buscar títulos, gestionar listas personalizadas y alternar entre perfiles infantil y normal, todo con una interfaz moderna y responsiva.
 
-✅ Props – ✅ Children – ✅ Composición
+## Características principales
 
-## Tabla de Contenidos
+- **Catálogo de películas**: Visualiza tendencias, populares y explora por géneros.
+- **Búsqueda animada**: Barra de búsqueda tipo Netflix, con animación de lupa y despliegue de input.
+- **Gestión de perfiles**: Alterna entre perfil normal e infantil (filtrado de contenido).
+- **Mi Lista**: Añade y elimina películas de tu lista personal, persistente en localStorage.
+- **Selector de géneros**: Filtra el catálogo por género con un selector tipo Netflix.
+- **Menú de usuario**: Acceso rápido a gestión de usuario, notificaciones, control de permisos y cierre de sesión.
+- **Responsive**: Diseño adaptativo para escritorio y móvil.
+- **Animaciones y UI moderna**: Uso de Tailwind CSS para transiciones, sombras y estilos atractivos.
 
-- [Características](#características)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Componentes Disponibles](#componentes-disponibles)
-- [Scripts](#scripts)
-- [Pruebas](#pruebas)
-- [Cobertura de Código](#cobertura-de-código)
-- [Estructura del Proyecto](#estructura-del-proyecto)
+## Estructura del proyecto
 
----
-
-## Características
-
-- Componentes reutilizables y personalizables.
-- Pruebas unitarias con Vitest y Testing Library.
-- Estilos con Tailwind CSS y PostCSS.
-- Ejemplo de integración en una aplicación React.
-- 100% de cobertura en la mayoría de los componentes principales.
-
-## Instalación
-
-Clona el repositorio e instala las dependencias:
-
-```sh
-git clone <url-del-repo>
-cd libreriaComponentes
-npm install
+```text
+carteleraLili/
+├── public/                # Archivos estáticos
+├── src/
+│   ├── api-thmdb/         # Métodos para consumir la API de TMDB
+│   ├── assets/            # Imágenes y recursos
+│   ├── components/        # Componentes reutilizables (Head, MainContent, CardSmall, MovieSearch, etc.)
+│   ├── config/            # Configuración y carga de datos iniciales
+│   ├── App.tsx            # Componente principal
+│   ├── main.tsx           # Punto de entrada de React
+│   └── index.css          # Estilos globales
+├── .env                   # Variables de entorno (API KEY TMDB)
+├── package.json           # Dependencias y scripts
+├── tailwind.config.ts     # Configuración de Tailwind CSS
+└── README.md              # Este archivo
 ```
 
-## Uso
+## Instalación y ejecución
 
-Puedes importar los componentes desde el archivo principal:
+1. **Clona el repositorio:**
 
-```jsx
-import { Card, Navbar, Form, Head, Footer } from "./index.js";
-```
+   ```bash
+   git clone <url-del-repo>
+   cd carteleraLili
+   ```
 
-Ejemplo de uso de un componente:
+2. **Instala dependencias:**
 
-```jsx
-<Form onSubmit={(data) => console.log(data)} />
-```
+   ```bash
+   npm install
+   ```
 
-## Componentes Disponibles
+3. **Configura la API Key de TMDB:**
 
-- **Card**
-- **Head**
-- **Footer**
-- **Navbar**
-- **Form**
+   Crea un archivo `.env` en la raíz con el siguiente contenido:
 
-Cada componente acepta props para su personalización. Consulta el código fuente para más detalles.
+   ```env
+   VITE_API_KEY="<tu_api_key_tmdb>"
+   ```
 
-## Scripts
+   Puedes obtener una API Key gratuita en [TMDB](https://www.themoviedb.org/settings/api).
 
-- `npm run dev` – Inicia el servidor de desarrollo con Vite.
-- `npm run build` – Genera la build de producción.
-- `npm run preview` – Previsualiza la build.
-- `npm run test` – Ejecuta las pruebas unitarias.
-- `npm run test:coverage` – Ejecuta las pruebas y genera el reporte de cobertura.
+4. **Inicia el servidor de desarrollo:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Accede a `http://localhost:5173` en tu navegador.
+
+## Scripts útiles
+
+- `npm run dev` - Inicia el servidor de desarrollo (Vite)
+- `npm run build` - Compila la app para producción
+- `npm run preview` - Previsualiza la app de producción
+- `npm run test` - Ejecuta los tests (Vitest, Playwright)
+
+## Principales componentes
+
+- **Head**: Cabecera fija con logo, título, búsqueda animada, navegación y menú de usuario.
+- **MainContent**: Muestra el catálogo, carruseles por género y "Seguir viendo".
+- **CardTrending/CardSmall**: Tarjetas de películas con imagen, título y acciones.
+- **MovieSearch**: Buscador animado tipo Netflix.
+- **GenreSelect**: Selector de géneros con UI moderna.
+- **Modal**: Ventanas modales para detalles de películas.
+
+## Personalización y extensibilidad
+
+- **Estilos**: Personaliza colores y animaciones en `tailwind.config.ts`.
+- **API**: Puedes cambiar la fuente de datos modificando los métodos en `src/api-thmdb/apiMetodos.tsx`.
+- **Componentes**: Todos los componentes son reutilizables y fácilmente modificables.
 
 ## Pruebas
 
-Las pruebas están ubicadas en la carpeta [`tests/`](tests/).  
-Ejecuta todas las pruebas con:
+Incluye pruebas unitarias y de integración con Vitest y Playwright.
 
-```sh
+Para ejecutar los tests:
+
+```bash
 npm run test
 ```
 
-Para ver la cobertura:
+## Créditos y agradecimientos
 
-```sh
-npm run test:coverage
-```
+- Inspirado en la UI de Netflix.
+- Usa la API de [The Movie Database (TMDB)](https://www.themoviedb.org/).
+- Desarrollado por el equipo del curso Frontend Peñascal.
 
-El reporte se genera en [`coverage/`](coverage/).
+## Licencia
 
-## Cobertura de Código
-
-- Los componentes principales tienen 100% de cobertura de statements, branches y functions.
-- Puedes consultar los reportes HTML en la carpeta [`coverage/`](coverage/).
-
-## Historial de Desarrollo
-
-### Semana del 20 al 23 de Mayo
-
-Durante esta semana, el equipo trabajó en la evolución y mejora de la librería de componentes React. Los miembros del equipo y sus contribuciones principales fueron:
-
-- **César**: 
-  - Desarrollo y mantenimiento de pruebas unitarias
-  - Implementación de casos de prueba para todos los componentes
-  - Asegurando la cobertura del 100% en los componentes principales
-
-- **Orlando**:
-  - Diseño y maquetación de la página principal
-  - Configuración inicial del proyecto y dependencias
-  - Implementación de la estructura base de la aplicación
-
-- **Ana**:
-  - Creación de la página de usuario y perfil
-  - Diseño y desarrollo de la página de perfil infantil
-  - Implementación de la lógica de autenticación
-
-- **Liliana**:
-  - Organización y estandarización de estilos CSS
-  - Implementación de Tailwind CSS
-  - Coordinación y revisión del trabajo del equipo
-  - Mejoras en la responsividad de los componentes
-
-### Estructura del Proyecto
-
-```
-libreriaComponentes/
-├── src/
-│ ├── components/
-│ │ ├── Card/
-│ │ ├── Footer/
-│ │ ├── Form/
-│ │ ├── Head/
-│ │ └── Navbar/
-│ ├── App.jsx
-│ ├── main.jsx
-│ └── ...
-├── tests/
-│ ├── App.test.jsx
-│ ├── Card.test.jsx
-│ ├── Footer.test.jsx
-│ ├── Form.test.jsx
-│ └── Head.test.jsx
-├── public/
-├── coverage/
-├── package.json
-└── README.md
-```
+Este proyecto es educativo y de uso libre para fines no comerciales.
