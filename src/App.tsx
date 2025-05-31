@@ -69,6 +69,7 @@ function App(props: AppProps) {
         }}
         SEARCH_API={searchApi}
         cardDetPop={cardDetPop}
+        headerContent={false}
       />
       <MainContent
         {...initialData}

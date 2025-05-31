@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
 import SearchOverlay from "./SearchOverlay";
+import { FaSearch } from "react-icons/fa";
 
 interface MovieSearchProps {
   SEARCH_API: string;
@@ -21,6 +22,9 @@ const MovieSearch: React.FC<MovieSearchProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedMovies, setSearchedMovies] = useState([]);
+  const [showInput, setShowInput] = useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
   interface Movie {
     title: string;
     poster_path: string;
@@ -77,29 +81,61 @@ const MovieSearch: React.FC<MovieSearchProps> = ({
     };
   }, [searchTerm, SEARCH_API]);
 
+  const handleLupaClick = () => {
+    setShowInput(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
+
+  const handleBlur = () => {
+    if (searchTerm === "") setShowInput(false);
+  };
+
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="relative w-full max-w-xl mb-6">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={placeholder}
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full text-black pr-16"
-          autoFocus={autoFocus}
-        />
-        {searchTerm && (
-          <button
-            onClick={() => setSearchTerm("")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent hover:bg-gray-200 text-gray-400 hover:text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-base transition"
-            aria-label="Limpiar búsqueda"
-            type="button"
-            tabIndex={-1}
-            style={{ pointerEvents: "auto" }}
-          >
-            ×
-          </button>
-        )}
+      <div className="relative w-full max-w-xl mb-6 flex items-center justify-end">
+        <div className="flex items-center w-full justify-end">
+          {!showInput && (
+            <button
+              onClick={handleLupaClick}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 ml-auto rounded-full p-3 transition-all duration-300 shadow-md"
+              aria-label="Buscar"
+            >
+              <FaSearch size={15} />
+            </button>
+          )}
+          <input
+            ref={inputRef}
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onBlur={handleBlur}
+            placeholder={placeholder}
+            className={`px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black pr-16 transition-all duration-300 ml-2 absolute right-0 top-1/2 -translate-y-1/2 ${
+              showInput ? "opacity-100 w-80" : "opacity-0 w-0 p-0 border-0"
+            }`}
+            style={{
+              minWidth: showInput ? 180 : 0,
+              maxWidth: 320,
+              visibility: showInput ? "visible" : "hidden",
+              zIndex: 10,
+            }}
+            autoFocus={showInput && autoFocus}
+          />
+          {showInput && searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent hover:bg-gray-200 text-gray-400 hover:text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-base transition"
+              aria-label="Limpiar búsqueda"
+              type="button"
+              tabIndex={-1}
+              style={{ pointerEvents: "auto" }}
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
 
       {isOverlayVisible && (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MovieSearch from "../MovieSearch/MovieSearch";
 
 type NavItem = {
@@ -18,6 +18,7 @@ type HeadProps = {
   showSearch?: boolean;
   SEARCH_API?: string;
   cardDetPop?: any[];
+  headerContent?: React.ReactNode;
 };
 
 const Head: React.FC<HeadProps> = ({
@@ -28,13 +29,29 @@ const Head: React.FC<HeadProps> = ({
   navClassName = "",
   onNavClick,
   onSearch,
-  onTitleClick, // NUEVO: función al hacer clic en el título
+  onTitleClick,
   showSearch = true,
-  SEARCH_API, // <-- nuevo
-  cardDetPop = [], // <-- nuevo
+  SEARCH_API,
+  cardDetPop = [],
+  headerContent,
 }) => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="bg-black text-red flex flex-col items-center py-4 px-8 w-full">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500 ${
+        scrolled ? "bg-black bg-opacity-95 shadow-lg" : "bg-transparent"
+      } text-red flex flex-col items-center py-4 px-8`}
+      style={{ backdropFilter: scrolled ? "blur(2px)" : undefined }}
+    >
       <div className="flex items-center justify-between w-full gap-4">
         <div className="flex items-center gap-4">
           {logo && <img src={logo} alt="Logo" className="w-10 h-10" />}
@@ -69,6 +86,9 @@ const Head: React.FC<HeadProps> = ({
               ))}
           </nav>
         </div>
+        {headerContent && (
+          <div className="w-full mt-4 flex justify-end">{headerContent}</div>
+        )}
       </div>
       {subtitle && <h2 className="text-lg text-red-400 mt-2">{subtitle}</h2>}
     </header>

@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MainContent from "../MainContent/MainContent";
-import CardSmall from "../CardSmall/CardSmall"; // Asegúrate de importar CardSmall
 import { getInitialData } from "../../config/initialData";
-import MovieSearch from "../MovieSearch/MovieSearch";
-import GenreSelect from "../GenreSelect/GenreSelect";
+import {
+  Head,
+  MainContent,
+  CardSmall,
+  MovieSearch,
+  GenreSelect,
+} from "../../../index";
+
+interface InitialData {
+  navItems: { href: string; label: string }[];
+  footerItems: { href: string; label: string }[];
+  cardsTrend: any;
+  cardsPopular: any;
+  SEARCH_API: string;
+  genresList: any;
+  popularByGenre: any;
+}
 
 const Profile = () => {
   const [data, setData] = useState<any>(null);
@@ -35,6 +48,11 @@ const Profile = () => {
   const [user, setUser] = useState(
     storedUser.nombre ? storedUser : { nombre: "Invitado" }
   ); // Por defecto, puedes cambiar esto según tu lógica de login
+
+  const [initialData, setInitialData] = useState<InitialData | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchApi, setSearchApi] = useState("");
+  const [cardDetPop, setCardDetPop] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,74 +93,95 @@ const Profile = () => {
   const genresList = data.genresList || [];
 
   return (
-    <div className="bg-black p-8 min-h-screen">
-      {/* Mensaje de saludo si el usuario está logueado */}
-      {user && user.nombre && (
-        <div className="mb-4 text-xl text-green-400 font-bold">
-          Hola: {user.nombre}
-        </div>
-      )}
-      <header className="flex justify-between items-center mb-6 bg-black">
-        <h1 className="text-3xl font-bold text-white">
-          {isKidsProfile ? "" : "Tu Perfil"}
-        </h1>
-
-        <div className="flex gap-4 items-center">
-          <button
-            onClick={handleSwitchProfile}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            {isKidsProfile ? "Cambiar a Perfil Normal" : "Infantil"}
-          </button>
-
-          <div className="relative">
-            <button
-              onClick={toggleMenu}
-              className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
-            >
-              <span role="img" aria-label="person">
-                👤
-              </span>
-            </button>
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
-                <ul className="py-2">
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Gestionar datos del usuario
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Activar/Desactivar notificaciones
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Control de permisos
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      const storedList = JSON.parse(localStorage.getItem("myList") || "[]");
-                      setMyList(storedList);
-                      setShowMyList(true);
-                      navigate("/profile");
+    <div className="bg-black min-h-screen text-gray-900 flex flex-col">
+      <Head
+        logo="./src/assets/react.png"
+        title="Movies React"
+        navClassName="flex gap-4 justify-center mb-4"
+        navItems={initialData?.navItems}
+        onSearch={(term) => {
+          if (term.trim()) {
+            setSearchTerm(term);
+          }
+        }}
+        SEARCH_API={data.SEARCH_API}
+        cardDetPop={cardDetPop}
+        headerContent={
+          <>
+            <h1 className="flex text-2xl gap-2 items-center mt-2 text-white font-bold">
+              {isKidsProfile ? "" : "Tu Perfil"}
+            </h1>
+            <div className="flex gap-4 items-center mt-2">
+              <button
+                onClick={handleSwitchProfile}
+                className="text-white px-6 py-2 rounded transition"
+                type="button"
+              >
+                {isKidsProfile ? "Cambiar a Perfil Normal" : "Infantil"}
+              </button>
+              <div className="relative">
+                <button
+                  onClick={toggleMenu}
+                  className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
+                  type="button"
+                  aria-haspopup="true"
+                  aria-expanded={isMenuOpen}
+                >
+                  <span role="img" aria-label="person">
+                    👤
+                  </span>
+                </button>
+                {isMenuOpen && (
+                  <div
+                    className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50"
+                    tabIndex={0}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget)) {
+                        setIsMenuOpen(false);
+                      }
                     }}
                   >
-                    Ver mi lista
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      handleLogout();
-                    }}
-                  >
-                    Cerrar sesión
-                  </li>
-                </ul>
+                    <ul className="py-2">
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Gestionar datos del usuario
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Activar/Desactivar notificaciones
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Control de permisos
+                      </li>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          const storedList = JSON.parse(
+                            localStorage.getItem("myList") || "[]"
+                          );
+                          setMyList(storedList);
+                          setShowMyList(true);
+                          navigate("/profile");
+                        }}
+                      >
+                        Ver mi lista
+                      </li>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          handleLogout();
+                        }}
+                      >
+                        Cerrar sesión
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      </header>
+            </div>
+          </>
+        }
+      />
 
       {/* Sección para mostrar Mi Lista */}
       {showMyList ? (
@@ -198,37 +237,6 @@ const Profile = () => {
       ) : null}
 
       {/* Solo mostrar el selector de género y el buscador si NO se está mostrando Mi Lista */}
-      {!showMyList && (
-        <>
-          <GenreSelect
-            genresList={genresList}
-            selectedGenre={selectedGenres[0] || ""}
-            onChange={(value: string[]) => setSelectedGenres(value)}
-          />
-
-          {/* Buscador de películas */}
-          {data && (
-            <div className="mb-8">
-              <MovieSearch
-                SEARCH_API={data.SEARCH_API}
-                cardDetPop={data.cardDetPop}
-                onAddToMyList={(movie: any) => {
-                  setMyList((prevList) => {
-                    // Evita duplicados por id
-                    if (prevList.some((m) => m.id === movie.id))
-                      return prevList;
-                    const updatedList = [...prevList, movie];
-                    localStorage.setItem("myList", JSON.stringify(updatedList));
-                    return updatedList;
-                  });
-                }}
-                myListGlobal={myList}
-                placeholder="Buscar películas en el catálogo..."
-              />
-            </div>
-          )}
-        </>
-      )}
 
       {/* Contenido principal (catálogo) */}
       {!showMyList && (
