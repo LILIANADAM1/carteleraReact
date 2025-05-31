@@ -1,27 +1,11 @@
 // src/main.tsx
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Profile, MyList } from "../index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google"; // Importamos el proveedor de Google OAuth
 import "./index.css";
 import App from "./App";
-import Profile from "./components/Profile/Profile"; // Asumiendo que Profile está en src/pages/Profile.tsx
-import MyList from "./components/MyList/MyList";
-
-// --- Importante: Define tu CLIENT_ID de Google aquí ---
-// Es crucial que esta variable se configure correctamente.
-// Utiliza una variable de entorno para mayor seguridad y flexibilidad.
-// Asegúrate de tener un archivo .env en la raíz de tu proyecto con:
-// VITE_GOOGLE_CLIENT_ID="TU_CLIENT_ID_DE_GOOGLE"
-const GOOGLE_CLIENT_ID: string = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-// Asegúrate de que GOOGLE_CLIENT_ID esté definido.
-// Esto es una buena práctica para evitar errores si la variable de entorno no se carga.
-if (!GOOGLE_CLIENT_ID) {
-  console.error("VITE_GOOGLE_CLIENT_ID no está definido. Por favor, asegúrate de tenerlo en tu archivo .env");
-  // Opcional: podrías lanzar un error o detener la aplicación aquí si el ID es crítico.
-}
-
 
 const rootElement = document.getElementById("root");
 
