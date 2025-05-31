@@ -12,4 +12,5 @@ export { default as Modal } from "./src/components/Modal/Modal";
 export { default as ButtonFavorite } from "./src/components/ButtonFavorite/ButtonFavorite";
 export { default as MainContent } from "./src/components/MainContent/MainContent";
 export { default as MovieSearch } from "./src/components/MovieSearch/MovieSearch";
-export { default } from "./src/components/Profile/Profile";
+export { default as Profile } from "./src/components/Profile/Profile";
+export { default as MyList } from "./src/components/MyList/MyList";

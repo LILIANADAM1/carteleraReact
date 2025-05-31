@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { GenreSelect, CardSmall, GenreCarousel, Modal } from "../../../index";
+import { CardSmall, GenreCarousel, Modal } from "../../../index";
 import CardTrending from "../CardTrending/CardTrending";
 
 // Tipos explícitos
