@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GoogleLoginButton from "../Form/GoogleLoginButton"; // Importa tu componente de botón de Google
+import { jwtDecode } from 'jwt-decode'; // Necesitarás instalar esta librería para decodificar el JWT
+
+// Instala jwt-decode si no lo has hecho:
+// npm install jwt-decode
+// npm install --save-dev @types/jwt-decode (para TypeScript)
 
 interface FormProps {
   onSubmit?: (data: {
@@ -17,6 +23,8 @@ const Form: React.FC<FormProps> = ({ onSubmit }) => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
+  // No es estrictamente necesario redeclarar estas interfaces si ya están definidas arriba
+  // Pero las mantengo por si las usas internamente en el contexto del componente.
   interface FormData {
     nombre: string;
     email: string;
@@ -55,6 +63,46 @@ const Form: React.FC<FormProps> = ({ onSubmit }) => {
       setError("");
       setSuccess("");
     };
+
+  // --- Lógica para el Login de Google ---
+  const handleGoogleLoginSuccess = (credentialResponse: any) => {
+    const credential = credentialResponse.credential;
+    if (credential) {
+      try {
+        const decoded: { name: string; email: string; picture: string } = jwtDecode(credential);
+        console.log('Información del usuario de Google:', decoded);
+
+        // Aquí puedes guardar la información del usuario de Google
+        // en tu estado global de autenticación, localStorage, etc.
+        // Por ejemplo, si tienes un contexto de autenticación:
+        // authContext.loginGoogle(decoded.email, decoded.name, decoded.picture);
+
+        // O si quieres guardar en localStorage similar a tu formulario actual:
+        localStorage.setItem("user", JSON.stringify({
+          nombre: decoded.name,
+          email: decoded.email,
+          picture: decoded.picture, // Puedes guardar la URL de la imagen si la necesitas
+          isGoogleLogin: true // Marcador para saber que es un login de Google
+        }));
+
+
+        setSuccess(`¡Bienvenid@, ${decoded.name}!`);
+        setError(""); // Limpia cualquier error previo del formulario
+        navigate("/profile"); // Redirige al usuario a la página de perfil
+      } catch (error) {
+        console.error('Error al decodificar el token JWT de Google:', error);
+        setError('Error al procesar el inicio de sesión con Google.');
+        setSuccess('');
+      }
+    }
+  };
+
+  const handleGoogleLoginFailure = () => {
+    console.log('Error en el login de Google');
+    setError('No se pudo iniciar sesión con Google. Inténtalo de nuevo.');
+    setSuccess('');
+  };
+  // --- Fin Lógica para el Login de Google ---
 
   return (
     <form
@@ -138,6 +186,21 @@ const Form: React.FC<FormProps> = ({ onSubmit }) => {
           {success}
         </div>
       )}
+
+      {/* Separador visual entre el formulario y el login de Google */}
+      <div className="flex items-center my-4">
+        <div className="flex-grow border-t border-neutral-700"></div>
+        <span className="flex-shrink mx-4 text-neutral-500">O</span>
+        <div className="flex-grow border-t border-neutral-700"></div>
+      </div>
+
+      {/* Botón de Login de Google */}
+      <div className="flex justify-center"> {/* Centrar el botón */}
+        <GoogleLoginButton
+          onSuccess={handleGoogleLoginSuccess}
+          onFailure={handleGoogleLoginFailure}
+        />
+      </div>
     </form>
   );
 };
