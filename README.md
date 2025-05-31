@@ -8,7 +8,7 @@ Cartelera React es una aplicación web inspirada en la experiencia de usuario de
 - **Búsqueda animada**: Barra de búsqueda con animación de lupa y despliegue de input.
 - **Gestión de perfiles**: Alterna entre perfil normal e infantil (filtrado de contenido).
 - **Mi Lista**: Añade y elimina películas de tu lista personal, persistente en localStorage.
-- **Selector de géneros**: Filtra el catálogo por género con un selector tipo Netflix.
+- **Selector de géneros**: Filtra el catálogo por género.
 - **Menú de usuario**: Acceso rápido a gestión de usuario, notificaciones, control de permisos y cierre de sesión.
 - **Responsive**: Diseño adaptativo para escritorio y móvil.
 - **Animaciones y UI moderna**: Uso de Tailwind CSS para transiciones, sombras y estilos atractivos.
