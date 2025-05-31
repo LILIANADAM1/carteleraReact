@@ -54,10 +54,10 @@ const CardSmall: React.FC<CardSmallProps> = ({
       className={`relative overflow-hidden ${
         fullScreen
           ? "w-screen h-screen flex flex-col justify-end items-start p-10 bg-transparent"
-          : "rounded-xl shadow-md p-5 w-[220px] h-[320px] text-center transition duration-200 cursor-pointer border border-transparent hover:scale-105 hover:border-blue-500 hover:shadow-xl bg-transparent"
+          : "rounded-xl shadow-md p-3 sm:p-5 w-full max-w-[220px] h-[320px] sm:h-[320px] text-center transition duration-200 cursor-pointer border border-transparent hover:scale-105 hover:border-blue-500 hover:shadow-xl bg-transparent"
       }`}
       onClick={onClick}
-      style={{ minHeight: 320 }}
+      style={{ minHeight: 220 }}
     >
       {/* Imagen de la película como fondo absoluto */}
       {useImg && image && (
@@ -65,7 +65,7 @@ const CardSmall: React.FC<CardSmallProps> = ({
           src={image}
           alt={title}
           className="absolute inset-0 w-full h-full object-cover rounded-xl z-0"
-          style={{ minHeight: 320 }}
+          style={{ minHeight: 220 }}
         />
       )}
       {/* Contenido encima de la imagen */}
@@ -87,10 +87,10 @@ const CardSmall: React.FC<CardSmallProps> = ({
                 }}
                 type="button"
                 style={{
-                  width: 40,
-                  height: 40,
-                  minWidth: 40,
-                  minHeight: 40,
+                  width: 36,
+                  height: 36,
+                  minWidth: 36,
+                  minHeight: 36,
                   padding: 0,
                 }}
               >
