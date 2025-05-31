@@ -51,11 +51,7 @@ const CardSmall: React.FC<CardSmallProps> = ({
 
   return (
     <div
-      className={`relative overflow-hidden ${
-        fullScreen
-          ? "w-screen h-screen flex flex-col justify-end items-start p-10 bg-transparent"
-          : "rounded-xl shadow-md p-3 sm:p-5 w-full max-w-[220px] h-[320px] sm:h-[320px] text-center transition duration-200 cursor-pointer border border-transparent hover:scale-105 hover:border-blue-500 hover:shadow-xl bg-transparent"
-      }`}
+      className={`relative overflow-hidden ${"rounded-xl shadow-md p-3 sm:p-5 w-full max-w-[220px] h-[320px] sm:h-[320px] text-center transition duration-200 cursor-pointer border border-transparent hover:scale-105 hover:border-blue-500 hover:shadow-xl bg-transparent"}`}
       onClick={onClick}
       style={{ minHeight: 220 }}
     >
