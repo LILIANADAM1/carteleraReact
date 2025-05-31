@@ -53,10 +53,12 @@ const Profile = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchApi, setSearchApi] = useState("");
   const [cardDetPop, setCardDetPop] = useState<any[]>([]);
+  const [showGenresModal, setShowGenresModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await getInitialData();
+      console.log("getInitialData result:", result);
       setData(result);
     };
     fetchData();
@@ -238,19 +240,82 @@ const Profile = () => {
       {/* Solo mostrar el selector de género y el buscador si NO se está mostrando Mi Lista */}
       {!showMyList && (
         <div className="relative w-full flex justify-center items-center">
-          <div className="absolute top-8 left-1/2 -translate-x-1/2 z-30 w-full max-w-md flex justify-center">
-            <div className="bg-black/80 rounded-full px-6 py-2 text-white shadow-lg border border-white/10">
-              <GenreSelect
-                genresList={
-                  Array.isArray(data.genresList)
-                    ? data.genresList.filter((g: any) => g && g.name)
-                    : []
-                }
-                selectedGenre={selectedGenres[0] || ""}
-                onChange={(value: string[]) => setSelectedGenres(value)}
-              />
-            </div>
+          {/* Caja tipo combobox */}
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs flex justify-center">
+            <button
+              className="bg-black border-2 border-white rounded-xl shadow-2xl px-8 py-3 text-white flex items-center justify-between w-full min-w-[220px] font-semibold text-lg hover:bg-white/10 transition"
+              onClick={() => {
+                console.log("Abriendo modal de géneros");
+                setShowGenresModal(true);
+              }}
+              type="button"
+              tabIndex={0}
+            >
+              <span>{selectedGenres[0] || "Selecciona un género"}</span>
+              <svg
+                className="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
           </div>
+          {/* Modal de géneros tipo Netflix */}
+          {showGenresModal &&
+            Array.isArray(genresList) &&
+            genresList.length > 0 && (
+              <>
+                {console.log("Renderizando modal de géneros")}
+                <div
+                  className="fixed inset-0 bg-black/80 z-[1000] flex items-center justify-center"
+                  onClick={() => setShowGenresModal(false)}
+                >
+                  <div
+                    className="bg-black border-2 border-white rounded-xl shadow-2xl px-8 py-6 text-white flex flex-col items-center min-w-[320px] max-w-lg relative"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      className="absolute top-2 right-2 text-white text-2xl hover:text-red-500"
+                      onClick={() => setShowGenresModal(false)}
+                      tabIndex={0}
+                    >
+                      &times;
+                    </button>
+                    <h2 className="text-2xl font-bold mb-4 tracking-wide">
+                      Géneros
+                    </h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-h-72 overflow-y-auto">
+                      {genresList
+                        .filter((g: any) => g && g.name)
+                        .map((genre: any) => (
+                          <button
+                            key={genre.name}
+                            onClick={() => {
+                              setSelectedGenres([genre.name]);
+                              setShowGenresModal(false);
+                            }}
+                            className={`py-2 px-3 rounded-lg text-white font-semibold transition border border-white/20 hover:bg-white/10 focus:bg-white/20 ${
+                              selectedGenres[0] === genre.name
+                                ? "bg-white/20 border-white"
+                                : ""
+                            }`}
+                            tabIndex={0}
+                          >
+                            {genre.name}
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
         </div>
       )}
 
