@@ -1,49 +1,19 @@
 # Cartelera React
 
-Cartelera React, es una aplicación web tipo Netflix para explorar, buscar y gestionar películas, desarrollada con React, TypeScript, Vite y TailwindCSS. Permite autenticación con Auth0, filtrado por géneros, búsqueda en tiempo real y gestión de una lista personal de favoritos.
+Cartelera React es una aplicación web inspirada en la experiencia de usuario de Netflix, desarrollada con React, TypeScript y Tailwind CSS. Permite explorar películas populares, buscar títulos, gestionar listas personalizadas y alternar entre perfiles infantil y normal, todo con una interfaz moderna y responsiva.
 
----
+## Características principales
 
-## Tabla de Contenidos
+- **Catálogo de películas**: Visualiza tendencias, populares y explora por géneros.
+- **Búsqueda animada**: Barra de búsqueda tipo Netflix, con animación de lupa y despliegue de input.
+- **Gestión de perfiles**: Alterna entre perfil normal e infantil (filtrado de contenido).
+- **Mi Lista**: Añade y elimina películas de tu lista personal, persistente en localStorage.
+- **Selector de géneros**: Filtra el catálogo por género con un selector tipo Netflix.
+- **Menú de usuario**: Acceso rápido a gestión de usuario, notificaciones, control de permisos y cierre de sesión.
+- **Responsive**: Diseño adaptativo para escritorio y móvil.
+- **Animaciones y UI moderna**: Uso de Tailwind CSS para transiciones, sombras y estilos atractivos.
 
-- [Descripción del Proyecto](#descripción-del-proyecto)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Instalación y Configuración](#instalación-y-configuración)
-- [Variables de Entorno](#variables-de-entorno)
-- [Scripts Disponibles](#scripts-disponibles)
-- [Componentes Principales](#componentes-principales)
-- [Flujo de Usuario](#flujo-de-usuario)
-
----
-
-## Descripción del Proyecto
-
-Cartelera React simula una plataforma de streaming donde los usuarios pueden:
-
-- Navegar por un catálogo de películas.
-- Filtrar por géneros con un selector (con scroll automático al género elegido).
-- Buscar películas por nombre en tiempo real.
-- Agregar/quitar películas de su lista personal ("Mi Lista").
-- Autenticarse de forma segura con Auth0.
-- Disfrutar de una interfaz moderna, responsiva y animada.
-
----
-
-## Tecnologías Utilizadas
-
-- **React** (con Vite) — Framework principal.
-- **TypeScript** — Tipado estático.
-- **TailwindCSS** — Estilos rápidos y responsivos.
-- **Auth0** — Autenticación segura.
-- **React Router DOM** — Ruteo SPA.
-- **Vitest** — Pruebas unitarias.
-- **TMDB API** (o similar) — Fuente de datos de películas.
-- **ESLint/Prettier** — Calidad y formato de código.
-
----
-
-## Estructura del Proyecto
+## Estructura del proyecto
 
 ```
 carteleraReact/
