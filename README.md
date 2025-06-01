@@ -1,43 +1,90 @@
 # Cartelera React
 
-Cartelera React es una aplicación web inspirada en la experiencia de usuario de Netflix, desarrollada con React, TypeScript y Tailwind CSS. Permite explorar películas populares, buscar títulos, gestionar listas personalizadas y alternar entre perfiles infantil y normal, todo con una interfaz moderna y responsiva.
+**Cartelera React** es una aplicación web de cartelera de cine tipo Netflix, desarrollada con React, Vite, TypeScript y TailwindCSS. Permite a los usuarios explorar películas, filtrar por géneros, buscar títulos, gestionar su lista personal de favoritos y autenticarse mediante Auth0.
 
-## Características principales
+---
 
-- **Catálogo de películas**: Visualiza tendencias, populares y explora por géneros.
-- **Búsqueda animada**: Barra de búsqueda con animación de lupa y despliegue de input.
-- **Gestión de perfiles**: Alterna entre perfil normal e infantil (filtrado de contenido).
-- **Mi Lista**: Añade y elimina películas de tu lista personal, persistente en localStorage.
-- **Selector de géneros**: Filtra el catálogo por género.
-- **Menú de usuario**: Acceso rápido a gestión de usuario, notificaciones, control de permisos y cierre de sesión.
-- **Responsive**: Diseño adaptativo para escritorio y móvil.
-- **Animaciones y UI moderna**: Uso de Tailwind CSS para transiciones, sombras y estilos atractivos.
+## Tabla de Contenidos
 
-## Estructura del proyecto
+- [Características](#características)
+- [Tecnologías](#tecnologías)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación y Configuración](#instalación-y-configuración)
+- [Variables de Entorno](#variables-de-entorno)
+- [Scripts Disponibles](#scripts-disponibles)
+- [Componentes Principales](#componentes-principales)
+- [Autenticación](#autenticación)
+- [Gestión de Favoritos](#gestión-de-favoritos)
+- [Estilos y Responsividad](#estilos-y-responsividad)
+- [Pruebas](#pruebas)
+- [Créditos](#créditos)
 
-```text
-carteleraLili/
-├── public/                # Archivos estáticos
+---
+
+## Características
+
+- **Catálogo de películas** con información y carátulas.
+- **Filtrado por géneros** con selector tipo Netflix.
+- **Búsqueda de películas** en tiempo real.
+- **Gestión de favoritos** (Mi Lista) persistente en localStorage.
+- **Autenticación segura** con Auth0.
+- **Pantalla de bienvenida** animada y moderna.
+- **Interfaz responsive** y atractiva con TailwindCSS.
+- **Componentes reutilizables** y arquitectura escalable.
+
+---
+
+## Tecnologías
+
+- **React** + **Vite**
+- **TypeScript**
+- **TailwindCSS**
+- **Auth0** (autenticación)
+- **React Router DOM**
+- **API TMDB** (o similar, configurable)
+- **Jest** (pruebas unitarias)
+- **ESLint/Prettier** (calidad de código)
+
+---
+
+## Estructura del Proyecto
+
+carteleraReact/
+├── public/
+│ ├── logo.png
+│ └── welcome.png
 ├── src/
-│   ├── api-thmdb/         # Métodos para consumir la API de TMDB
-│   ├── assets/            # Imágenes y recursos
-│   ├── components/        # Componentes reutilizables (Head, MainContent, CardSmall, MovieSearch, etc.)
-│   ├── config/            # Configuración y carga de datos iniciales
-│   ├── App.tsx            # Componente principal
-│   ├── main.tsx           # Punto de entrada de React
-│   └── index.css          # Estilos globales
-├── .env                   # Variables de entorno (API KEY TMDB)
-├── package.json           # Dependencias y scripts
-├── tailwind.config.ts     # Configuración de Tailwind CSS
-└── README.md              # Este archivo
-```
+│ ├── components/
+│ │ ├── CardTrending/
+│ │ ├── CardSmall/
+│ │ ├── GenreSelect/
+│ │ ├── MainContent/
+│ │ ├── Profile/
+│ │ ├── MyList/
+│ │ ├── Head/
+│ │ ├── Modal/
+│ │ ├── Footer/
+│ │ └── navbar/
+│ │ ├── auth/
+│ │ └── guest/
+│ ├── resources/views/
+│ │ └── welcome.tsx
+│ ├── config/
+│ │ └── initialData.ts
+│ ├── App.tsx
+│ └── main.tsx
+├── .env
+├── index.ts
+└── README.md
 
-## Instalación y ejecución
+---
+
+## Instalación y Configuración
 
 1. **Clona el repositorio:**
 
    ```bash
-   git clone <url-del-repo>
+   git clone https://github.com/tuusuario/carteleraLili.git
    cd carteleraLili
    ```
 
@@ -47,15 +94,11 @@ carteleraLili/
    npm install
    ```
 
-3. **Configura la API Key de TMDB:**
+3. **Configura las variables de entorno:**
+   Crea un archivo `.env` en la raíz con tu API Key de TMDB y credenciales de Auth0:
 
-   Crea un archivo `.env` en la raíz con el siguiente contenido:
-
-   ```env
-   VITE_API_KEY="<tu_api_key_tmdb>"
-   ```
-
-   Puedes obtener una API Key gratuita en [TMDB](https://www.themoviedb.org/settings/api).
+   - `VITE_API_KEY`="TU_API_KEY_TMDB"
+   - `VITE_AUTH0_CLIENT_ID`=TU_CLIENT_ID_AUTH0
 
 4. **Inicia el servidor de desarrollo:**
 
@@ -63,46 +106,76 @@ carteleraLili/
    npm run dev
    ```
 
-   Accede a `http://localhost:5173` en tu navegador.
+5. **Abre la app en tu navegador:**
 
-## Scripts útiles
+   `http://localhost:5173`
 
-- `npm run dev` - Inicia el servidor de desarrollo (Vite)
-- `npm run build` - Compila la app para producción
-- `npm run preview` - Previsualiza la app de producción
-- `npm run test` - Ejecuta los tests (Vitest, Playwright)
+## Variables de Entorno
 
-## Principales componentes
+- `VITE_API_KEY`: API Key de TMDB.
+- `VITE_AUTH0_CLIENT_ID`: Client ID de Auth0.
 
-- **Head**: Cabecera fija con logo, título, búsqueda animada, navegación y menú de usuario.
-- **MainContent**: Muestra el catálogo, carruseles por género y "Seguir viendo".
-- **CardTrending/CardSmall**: Tarjetas de películas con imagen, título y acciones.
-- **MovieSearch**: Buscador animado tipo Netflix.
-- **GenreSelect**: Selector de géneros con UI moderna.
-- **Modal**: Ventanas modales para detalles de películas.
+---
 
-## Personalización y extensibilidad
+## Scripts Disponibles
 
-- **Estilos**: Personaliza colores y animaciones en `tailwind.config.ts`.
-- **API**: Puedes cambiar la fuente de datos modificando los métodos en `src/api-thmdb/apiMetodos.tsx`.
-- **Componentes**: Todos los componentes son reutilizables y fácilmente modificables.
+- `npm run dev` — Inicia el servidor de desarrollo.
+- `npm run build` — Genera la build de producción.
+- `npm run preview` — Previsualiza la build.
+- `npm run test` — Ejecuta pruebas unitarias.
+
+---
+
+## Componentes Principales
+
+- **Head**: Barra superior con logo, título, navegación y búsqueda.
+- **NavbarGuest / NavbarAuth**: Navbars para usuarios autenticados o invitados.
+- **Profile**: Perfil del usuario, catálogo, selector de géneros y menú.
+- **MainContent**: Renderiza el catálogo de películas y el filtro de géneros.
+- **CardTrending / CardSmall**: Tarjetas de películas (grandes y pequeñas).
+- **GenreSelect**: Selector de géneros tipo Netflix.
+- **MyList**: Lista de favoritos del usuario, persistente.
+- **Modal**: Ventanas modales reutilizables.
+- **Welcome**: Pantalla de bienvenida animada.
+
+---
+
+## Autenticación
+
+- Implementada con **Auth0**.
+- El contexto `AuthContext` provee el usuario, estado de autenticación y logout.
+- El botón "Iniciar sesión" usa `loginWithRedirect`.
+- El logout redirige a `/welcome` tras cerrar sesión.
+
+---
+
+## Gestión de Favoritos
+
+- Los favoritos se guardan en `localStorage` bajo la clave `myList`.
+- Puedes agregar o quitar películas desde cualquier Card.
+- La sección "Mi Lista" es accesible desde el menú y desde `/favoritos`.
+
+---
+
+## Estilos y Responsividad
+
+- **TailwindCSS** para estilos rápidos y responsivos.
+- Animaciones CSS para bienvenida y transiciones.
+- Componentes adaptados a móvil y escritorio.
+
+---
 
 ## Pruebas
 
-Incluye pruebas unitarias y de integración con Vitest y Playwright.
+- Pruebas unitarias con **React Testing Library**.
+- Ejecuta `npm run test` para correr los tests.
 
-Para ejecutar los tests:
+---
 
-```bash
-npm run test
-```
+## Créditos
 
-## Créditos y agradecimientos
+- Inspirado en Netflix UI.
+- API de películas: [TMDB](https://www.themoviedb.org/)
+- Autenticación: [Auth0](https://auth0.com/)
 
-- Inspirado en la UI de Netflix.
-- Usa la API de [The Movie Database (TMDB)](https://www.themoviedb.org/).
-- Desarrollado por el equipo del curso Frontend Peñascal.
-
-## Licencia
-
-Este proyecto es educativo y de uso libre para fines no comerciales.
+---
