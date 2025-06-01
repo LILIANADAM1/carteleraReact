@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { ButtonFavorite } from "../../../index";
+import { ButtonFavorite, ButtonAddToList } from "../../../index";
 import { useLocation } from "react-router-dom";
-import AddToListButton from "../AddToListButton/AddToListButton";
 import { Movie } from "src/api-thmdb/apiMetodos";
 
 interface CardSmallProps {
@@ -67,7 +66,7 @@ const CardSmall: React.FC<CardSmallProps> = ({
       {/* Contenido encima de la imagen */}
       <div className="relative z-10 w-full h-full flex flex-col justify-end">
         {/* Botones solo en perfil y no fullScreen */}
-        {!fullScreen && isProfilePage && (
+        {isProfilePage && (
           <>
             <div className="w-full flex items-center justify-between gap-2 mt-2 top-4 relative">
               <div className="absolute left-0 right-0 bottom-0 top-0 w-full h-full bg-white/20 rounded-xl z-0 pointer-events-none" />
@@ -75,59 +74,11 @@ const CardSmall: React.FC<CardSmallProps> = ({
                 isFavorite={isFavorite}
                 onToggle={toggleFavorite}
               />
-              <button
-                className="rounded-full bg-black text-white font-bold transition hover:bg-neutral-800 text-xs shadow-md border-2 border-white/10 hover:border-white mx-1 flex items-center justify-center"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClick();
-                }}
-                type="button"
-                style={{
-                  width: 36,
-                  height: 36,
-                  minWidth: 36,
-                  minHeight: 36,
-                  padding: 0,
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                  <rect
-                    x="11"
-                    y="10"
-                    width="2"
-                    height="6"
-                    rx="1"
-                    fill="currentColor"
-                  />
-                  <rect
-                    x="11"
-                    y="7"
-                    width="2"
-                    height="2"
-                    rx="1"
-                    fill="currentColor"
-                  />
-                </svg>
-              </button>
               <div
                 className="flex-1 min-w-0 mx-1"
                 onClick={(e) => e.stopPropagation()}
               >
-                <AddToListButton
+                <ButtonAddToList
                   movie={{
                     id: props.id ?? title,
                     image,

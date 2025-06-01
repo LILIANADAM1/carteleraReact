@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import MovieSearch from "../MovieSearch/MovieSearch";
+import MovieSearch from "../../MovieSearch/MovieSearch";
+import { useNavigate, useLocation, Routes, Route } from "react-router-dom";
 
 type NavItem = {
   href: string;
@@ -37,6 +38,8 @@ const Head: React.FC<HeadProps> = ({
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,9 +58,9 @@ const Head: React.FC<HeadProps> = ({
     >
       <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-4">
         <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
-          {logo && <img src={logo} alt="Logo" className="w-10 h-10" />}
+          {logo && <img src={logo} alt="Movies React" className="w-10 h-10" />}
           <button
-            onClick={onTitleClick}
+            onClick={() => navigate("/profile", { replace: true })}
             className="text-2xl font-bold text-red-500 hover:text-red-300 transition cursor-pointer focus:outline-none"
           >
             {title}
@@ -73,10 +76,33 @@ const Head: React.FC<HeadProps> = ({
             </button>
           </div>
         </div>
-        {/* Búsqueda y navegación en desktop */}
-        <div className="hidden sm:flex flex-1 justify-center items-center gap-4 w-full">
+        {/* Búsqueda y navegación en desktop SOLO si showMobileNav es false y solo en /profile */}
+        {location.pathname === "/profile" && !showMobileNav && (
+          <div className="hidden sm:flex flex-1 justify-center items-center gap-4 w-full">
+            {showSearch && (
+              <div className="w-full max-w-xs md:max-w-md lg:w-96">
+                <MovieSearch
+                  SEARCH_API={SEARCH_API ?? ""}
+                  cardDetPop={cardDetPop}
+                  placeholder="Buscar películas..."
+                  autoFocus={false}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        {/* headerContent en desktop */}
+        {headerContent && (
+          <div className="hidden sm:flex w-full sm:w-auto mt-4 sm:mt-0 justify-end">
+            {headerContent}
+          </div>
+        )}
+      </div>
+      {/* Navegación y búsqueda en móvil SOLO en /profile */}
+      {location.pathname === "/profile" && showMobileNav && (
+        <div className="sm:hidden w-full flex flex-col gap-2 mt-2">
           {showSearch && (
-            <div className="w-full max-w-xs md:max-w-md lg:w-96">
+            <div className="w-full">
               <MovieSearch
                 SEARCH_API={SEARCH_API ?? ""}
                 cardDetPop={cardDetPop}
@@ -85,61 +111,11 @@ const Head: React.FC<HeadProps> = ({
               />
             </div>
           )}
-          <nav className={navClassName + " flex gap-2"}>
-            {navItems &&
-              navItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => onNavClick && onNavClick(item.href)}
-                  className="text-white hover:text-white-400 font-bold transition text-lg bg-red-500 px-4 py-2 rounded-lg"
-                >
-                  {item.label}
-                </button>
-              ))}
-          </nav>
+          {headerContent && (
+            <div className="w-full flex justify-end mt-2">{headerContent}</div>
+          )}
         </div>
-        {/* headerContent en desktop */}
-        {headerContent && (
-          <div className="hidden sm:flex w-full sm:w-auto mt-4 sm:mt-0 justify-end">
-            {headerContent}
-          </div>
-        )}
-      </div>
-      {/* Navegación y búsqueda en móvil */}
-      <div
-        className={`sm:hidden w-full flex flex-col gap-2 mt-2 ${
-          showMobileNav ? "" : "hidden"
-        }`}
-      >
-        {showSearch && (
-          <div className="w-full">
-            <MovieSearch
-              SEARCH_API={SEARCH_API ?? ""}
-              cardDetPop={cardDetPop}
-              placeholder="Buscar películas..."
-              autoFocus={false}
-            />
-          </div>
-        )}
-        <nav className={navClassName + " flex flex-col gap-2 w-full"}>
-          {navItems &&
-            navItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => {
-                  onNavClick && onNavClick(item.href);
-                  setShowMobileNav(false);
-                }}
-                className="text-white hover:text-white-400 font-bold transition text-lg bg-red-500 px-4 py-2 rounded-lg w-full"
-              >
-                {item.label}
-              </button>
-            ))}
-        </nav>
-        {headerContent && (
-          <div className="w-full flex justify-end mt-2">{headerContent}</div>
-        )}
-      </div>
+      )}
       {subtitle && <h2 className="text-lg text-red-400 mt-2">{subtitle}</h2>}
     </header>
   );

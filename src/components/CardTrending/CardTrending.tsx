@@ -61,6 +61,11 @@ const CardTrending: React.FC<CardTrendingProps> = ({
           }}
         />
       )}
+      <div
+        className={`absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 ${
+          fullScreen ? "z-50" : "z-10"
+        }`}
+      ></div>
       <h3
         className={`relative z-10 ${
           isMobile ? "text-xl" : isTablet ? "text-2xl" : "text-3xl"

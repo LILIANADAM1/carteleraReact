@@ -1,40 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { Head, Footer, Modal } from "../index";
-import MainContent from "./components/MainContent/MainContent";
+import { useNavigate, useLocation, Routes, Route } from "react-router-dom";
+import {
+  Profile,
+  Welcome,
+  AuthProvider,
+  ProtectedRoute,
+  Footer,
+  NavbarGuest,
+  Head,
+  MyList,
+  GenreSelect,
+} from "../index";
+import { Spinner } from "../src/resources/spinner";
 import { getInitialData } from "./config/initialData";
-import Form from "./components/Form/Form";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAuthContext } from "./components/MainContext/AuthContext";
 
 // Define CardDetail type if not imported from elsewhere
 interface CardDetail {
   // Add the properties that CardDetail should have, for example:
   id: number;
   title: string;
-  // Add other fields as needed based on your data structure
 }
 
-interface AppProps {
-  // Define any props you expect here, or leave empty if none
-}
-
+//InicialData interface to define the structure of initial data
 interface InitialData {
   navItems: { href: string; label: string }[];
   footerItems: { href: string; label: string }[];
   cardsTrend: any;
   cardsPopular: any;
-  cardDetails: CardDetail[]; // Or CardDetailTrend[] if that's the correct type
+  cardDetails: CardDetail[];
   cardDetPop: CardDetail[];
-  // Add other fields as needed based on your data structure
   SEARCH_API: string;
-  genresList: any; // Update 'any' to the correct type if available
-  popularByGenre: any; // Update 'any' to the correct type if available
+  genresList: any;
+  popularByGenre: any;
 }
 
-function App(props: AppProps) {
+function App() {
+  const [data, setData] = useState<any>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [initialData, setInitialData] = useState<InitialData | null>(null);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchApi, setSearchApi] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showMyList, setShowMyList] = useState(false);
+  const [myList, setMyList] = useState<any[]>([]);
   const [cardDetPop, setCardDetPop] = useState<CardDetail[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<any[]>([]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { isLoading, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     getInitialData().then((data) => {
@@ -44,53 +60,104 @@ function App(props: AppProps) {
     });
   }, []);
 
-  if (!initialData) return <div>Cargando...</div>;
+  useEffect(() => {
+    if (isAuthenticated && location.pathname === "/") {
+      navigate("/profile", { replace: true });
+    }
+  }, [isAuthenticated, location.pathname, navigate]);
 
-  const handleLoginClick = () => {
-    setIsLoginModalOpen(true);
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
   };
 
-  const handleLoginClose = () => {
-    setIsLoginModalOpen(false);
-  };
+  if (!initialData) {
+    return <Spinner />;
+  }
 
   return (
-    <div className="bg-black min-h-screen text-gray-900 flex flex-col">
-      <Head
-        logo="./src/assets/react.png"
-        title="Movies React"
-        navClassName="flex gap-4 justify-center mb-4"
-        navItems={initialData?.navItems}
-        onNavClick={handleLoginClick}
-        onSearch={(term) => {
-          if (term.trim()) {
-            setSearchTerm(term);
-          }
-        }}
-        SEARCH_API={searchApi}
-        cardDetPop={cardDetPop}
-        headerContent={false}
-      />
-      <MainContent
-        {...initialData}
-        {...props}
+    <AuthProvider>
+      <AppContent
+        data={data}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        navigate={navigate}
+        location={location}
+        isLoading={isLoading}
+        isAuthenticated={isAuthenticated}
+        initialData={initialData}
+        searchApi={searchApi}
         searchTerm={searchTerm}
-        genresList={initialData.genresList}
-        popularByGenre={initialData.popularByGenre}
+        setSearchTerm={setSearchTerm}
+        showMyList={showMyList}
+        setShowMyList={setShowMyList}
+        myList={myList}
+        setMyList={setMyList}
+        cardDetPop={cardDetPop}
+        selectedGenres={selectedGenres}
+        setSelectedGenres={setSelectedGenres}
       />
-      <Footer>
-        &copy; {new Date().getFullYear()} Mi Sitio Web. Todos los derechos
-        reservados.
-      </Footer>
-      <Modal isOpen={isLoginModalOpen} onClose={handleLoginClose}>
-        <Form
-          onSubmit={(data) => {
-            // Aquí puedes manejar los datos del formulario
-            console.log("Formulario enviado:", data);
-            handleLoginClose();
-          }}
+    </AuthProvider>
+  );
+}
+
+function AppContent(props: any) {
+  const { user, logout } = useAuthContext();
+  const {
+    data,
+    isMenuOpen,
+    setIsMenuOpen,
+    navigate,
+    isAuthenticated,
+    setSearchTerm,
+    cardDetPop,
+    selectedGenres,
+    setSelectedGenres,
+  } = props;
+
+  function toggleMenu(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
+    setIsMenuOpen((prev: boolean) => !prev);
+  }
+  return (
+    <div className="min-h-screen flex flex-col">
+      {isAuthenticated ? (
+        <Head logo="./logo.png" title="Movies React" />
+      ) : (
+        <NavbarGuest />
+      )}
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/welcome" element={<Welcome />} />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
         />
-      </Modal>
+
+        <Route
+          path="/favoritos"
+          element={
+            <ProtectedRoute>
+              <div className="bg-black min-h-screen text-gray-900 flex flex-col items-center justify-center">
+                <MyList />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+
+      <Footer>
+        <span className="text-sm text-gray-400">
+          © {new Date().getFullYear()} Movies React. Todos los derechos
+          reservados.
+        </span>
+      </Footer>
     </div>
   );
 }
