@@ -1,81 +1,80 @@
 # Cartelera React
 
-**Cartelera React** es una aplicación web de cartelera de cine tipo Netflix, desarrollada con React, Vite, TypeScript y TailwindCSS. Permite a los usuarios explorar películas, filtrar por géneros, buscar títulos, gestionar su lista personal de favoritos y autenticarse mediante Auth0.
+Cartelera React, es una aplicación web tipo Netflix para explorar, buscar y gestionar películas, desarrollada con React, TypeScript, Vite y TailwindCSS. Permite autenticación con Auth0, filtrado por géneros, búsqueda en tiempo real y gestión de una lista personal de favoritos.
 
 ---
 
 ## Tabla de Contenidos
 
-- [Características](#características)
-- [Tecnologías](#tecnologías)
+- [Descripción del Proyecto](#descripción-del-proyecto)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Instalación y Configuración](#instalación-y-configuración)
 - [Variables de Entorno](#variables-de-entorno)
 - [Scripts Disponibles](#scripts-disponibles)
 - [Componentes Principales](#componentes-principales)
-- [Autenticación](#autenticación)
-- [Gestión de Favoritos](#gestión-de-favoritos)
-- [Estilos y Responsividad](#estilos-y-responsividad)
-- [Pruebas](#pruebas)
-- [Créditos](#créditos)
+- [Flujo de Usuario](#flujo-de-usuario)
 
 ---
 
-## Características
+## Descripción del Proyecto
 
-- **Catálogo de películas** con información y carátulas.
-- **Filtrado por géneros** con selector.
-- **Búsqueda de películas** en tiempo real.
-- **Gestión de favoritos** (Mi Lista) persistente en localStorage.
-- **Autenticación segura** con Auth0.
-- **Pantalla de bienvenida** animada y moderna.
-- **Interfaz responsive** y atractiva con TailwindCSS.
-- **Componentes reutilizables** y arquitectura escalable.
+Cartelera React simula una plataforma de streaming donde los usuarios pueden:
+
+- Navegar por un catálogo de películas.
+- Filtrar por géneros con un selector (con scroll automático al género elegido).
+- Buscar películas por nombre en tiempo real.
+- Agregar/quitar películas de su lista personal ("Mi Lista").
+- Autenticarse de forma segura con Auth0.
+- Disfrutar de una interfaz moderna, responsiva y animada.
 
 ---
 
-## Tecnologías
+## Tecnologías Utilizadas
 
-- **React** + **Vite**
-- **TypeScript**
-- **TailwindCSS**
-- **Auth0** (autenticación)
-- **React Router DOM**
-- **API TMDB** (o similar, configurable)
-- **Jest** (pruebas unitarias)
-- **ESLint/Prettier** (calidad de código)
+- **React** (con Vite) — Framework principal.
+- **TypeScript** — Tipado estático.
+- **TailwindCSS** — Estilos rápidos y responsivos.
+- **Auth0** — Autenticación segura.
+- **React Router DOM** — Ruteo SPA.
+- **Vitest** — Pruebas unitarias.
+- **TMDB API** (o similar) — Fuente de datos de películas.
+- **ESLint/Prettier** — Calidad y formato de código.
 
 ---
 
 ## Estructura del Proyecto
 
+```
 carteleraReact/
 ├── public/
-│ ├── logo.png
-│ └── welcome.png
+│   ├── logo.png
+│   └── welcome.png
 ├── src/
-│ ├── components/
-│ │ ├── CardTrending/
-│ │ ├── CardSmall/
-│ │ ├── GenreSelect/
-│ │ ├── MainContent/
-│ │ ├── Profile/
-│ │ ├── MyList/
-│ │ ├── Head/
-│ │ ├── Modal/
-│ │ ├── Footer/
-│ │ └── navbar/
-│ │ ├── auth/
-│ │ └── guest/
-│ ├── resources/views/
-│ │ └── welcome.tsx
-│ ├── config/
-│ │ └── initialData.ts
-│ ├── App.tsx
-│ └── main.tsx
+│   ├── components/
+│   │   ├── CardTrending/
+│   │   ├── CardSmall/
+│   │   ├── GenreSelect/
+│   │   ├── MainContext/
+│   │   ├── Profile/
+│   │   ├── MyList/
+│   │   ├── Head/
+│   │   ├── Modal/
+│   │   ├── Footer/
+│   │   └── navbar/
+│   │       ├── auth/
+│   │       └── guest/
+│   ├── resources/views/
+│   │   └── welcome.tsx
+│   ├── config/
+│   │   └── initialData.tsx
+│   ├── App.tsx
+│   └── main.tsx
 ├── .env
 ├── index.ts
-└── README.md
+├── README.md
+└── package.json
+```
 
 ---
 
@@ -95,10 +94,13 @@ carteleraReact/
    ```
 
 3. **Configura las variables de entorno:**
-   Crea un archivo `.env` en la raíz con tu API Key de TMDB y credenciales de Auth0:
+   Crea un archivo `.env` en la raíz con tus claves:
 
-   - `VITE_API_KEY`="TU_API_KEY_TMDB"
-   - `VITE_AUTH0_CLIENT_ID`=TU_CLIENT_ID_AUTH0
+   ```env
+   VITE_API_KEY=TU_API_KEY_TMDB
+   VITE_AUTH0_CLIENT_ID=TU_CLIENT_ID_AUTH0
+   VITE_AUTH0_DOMAIN=TU_DOMINIO_AUTH0
+   ```
 
 4. **Inicia el servidor de desarrollo:**
 
@@ -107,13 +109,17 @@ carteleraReact/
    ```
 
 5. **Abre la app en tu navegador:**
+   ```
+   http://localhost:5173
+   ```
 
-   `http://localhost:5173`
+---
 
 ## Variables de Entorno
 
 - `VITE_API_KEY`: API Key de TMDB.
 - `VITE_AUTH0_CLIENT_ID`: Client ID de Auth0.
+- `VITE_AUTH0_DOMAIN`: Dominio de Auth0.
 
 ---
 
@@ -128,54 +134,31 @@ carteleraReact/
 
 ## Componentes Principales
 
-- **Head**: Barra superior con logo, título, navegación y búsqueda.
-- **NavbarGuest / NavbarAuth**: Navbars para usuarios autenticados o invitados.
-- **Profile**: Perfil del usuario, catálogo, selector de géneros y menú.
-- **MainContent**: Renderiza el catálogo de películas y el filtro de géneros.
+- **Head**: Barra superior con logo, título, búsqueda y menú de usuario.
+- **NavbarGuest / NavbarAuth**: Navbars para usuarios invitados o autenticados.
+- **Profile**: Página de perfil, catálogo, selector de géneros y menú.
+- **MainContext**: Renderiza el catálogo y gestiona el estado global.
 - **CardTrending / CardSmall**: Tarjetas de películas (grandes y pequeñas).
-- **GenreSelect**: Selector de géneros tipo Netflix.
-- **MyList**: Lista de favoritos del usuario, persistente.
+- **GenreSelect**: Selector de géneros.
+- **MyList**: Lista de favoritos del usuario, persistente en localStorage.
 - **Modal**: Ventanas modales reutilizables.
+- **Footer**: Pie de página con logo y créditos.
 - **Welcome**: Pantalla de bienvenida animada.
 
 ---
 
-## Autenticación
+## Flujo de Usuario
 
-- Implementada con **Auth0**.
-- El contexto `AuthContext` provee el usuario, estado de autenticación y logout.
-- El botón "Iniciar sesión" usa `loginWithRedirect`.
-- El logout redirige a `/welcome` tras cerrar sesión.
-
----
-
-## Gestión de Favoritos
-
-- Los favoritos se guardan en `localStorage` bajo la clave `myList`.
-- Puedes agregar o quitar películas desde cualquier Card.
-- La sección "Mi Lista" es accesible desde el menú y desde `/favoritos`.
-
----
-
-## Estilos y Responsividad
-
-- **TailwindCSS** para estilos rápidos y responsivos.
-- Animaciones CSS para bienvenida y transiciones.
-- Componentes adaptados a móvil y escritorio.
-
----
-
-## Pruebas
-
-- Pruebas unitarias con **React Testing Library**.
-- Ejecuta `npm run test` para correr los tests.
-
----
-
-## Créditos
-
-- Inspirado en Netflix UI.
-- API de películas: [TMDB](https://www.themoviedb.org/)
-- Autenticación: [Auth0](https://auth0.com/)
+1. **Pantalla de bienvenida:** Animada, con acceso a login.
+2. **Navegación como invitado:** Solo puede ver la pantalla de bienvenida.
+3. **Login con Auth0:** Redirección segura y gestión de sesión.
+4. **Perfil:**
+   - Catálogo de películas.
+   - Selector de géneros (scroll automático al género elegido).
+   - Búsqueda en tiempo real.
+   - Agregar/quitar películas de "Mi Lista".
+   - Acceso a favoritos desde el menú.
+5. **Mi Lista:** Página dedicada a los favoritos del usuario.
+6. **Logout:** Cierra sesión y redirige a bienvenida.
 
 ---
