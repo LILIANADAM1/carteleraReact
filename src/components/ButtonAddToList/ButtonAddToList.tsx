@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-type AddToListButtonProps = {
+type ButtonAddToListProps = {
   movie: { id: string | number; [key: string]: any };
   onAdd?: (myList: any[]) => void;
   myListGlobal?: any[];
   buttonClassName?: string;
 };
 
-const AddToListButton: React.FC<AddToListButtonProps> = ({
+const ButtonAddToList: React.FC<ButtonAddToListProps> = ({
   movie,
   onAdd,
   myListGlobal,
@@ -88,4 +88,4 @@ const AddToListButton: React.FC<AddToListButtonProps> = ({
   );
 };
 
-export default AddToListButton;
+export default ButtonAddToList;

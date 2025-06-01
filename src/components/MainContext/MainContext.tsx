@@ -31,7 +31,7 @@ interface MainContentProps {
   setSelectedGenres?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const MainContent = ({
+const MainContext = ({
   cardDetails,
   genresList,
   popularByGenre,
@@ -247,24 +247,6 @@ const MainContent = ({
       {searchTerm.trim() === "" && (
         <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-black">
           <div className="w-full flex flex-col gap-12 items-center p-8">
-            {/* Carrusel de "Seguir viendo" */}
-            {continueWatching && continueWatching.length > 0 && (
-              <GenreCarousel
-                genreName="Seguir viendo"
-                movies={filterKidsContent(continueWatching)}
-                carouselIndex={carouselIndexes["Seguir viendo"] || 0}
-                setCarouselIndex={(newIndex: number) =>
-                  setCarouselIndexes((prev: { [key: string]: number }) => ({
-                    ...prev,
-                    "Seguir viendo": newIndex,
-                  }))
-                }
-                cardDetPop={cardDetPop}
-                maxTitleLength={22}
-                visibleCount={4}
-              />
-            )}
-
             {/* Carruseles de géneros */}
             {(selectedGenres && selectedGenres.length > 0
               ? selectedGenres
@@ -299,4 +281,4 @@ const MainContent = ({
   );
 };
 
-export default MainContent;
+export default MainContext;

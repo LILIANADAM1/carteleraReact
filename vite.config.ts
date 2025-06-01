@@ -2,9 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: "/carteleraReact/", // 👈 este es el cambio clave
+  base: "/", // 👈 este es el cambio clave
   plugins: [react()],
-  envPrefix: ['VITE_'],
+  envPrefix: ["VITE_"],
   test: {
     globals: true,
     environment: "jsdom",

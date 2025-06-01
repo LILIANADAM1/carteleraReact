@@ -150,38 +150,8 @@ export async function getInitialData() {
     .slice(0, DEFAULT_GENRES_TO_SHOW)
     .map((g: Genre) => g.name);
 
-  interface FormSubmitHandler {
-    (data: CustomFormData): void;
-  }
-
-  interface OnSubmitHandler {
-    (data: CustomFormData): void;
-  }
-
-  // Assuming setFormResult is defined elsewhere in the scope
-  // Remove onSubmit usage since it's not defined
-  const handleFormSubmit: FormSubmitHandler = (data: CustomFormData) => {
-    setFormResult(data);
-    // If you need to handle onSubmit, pass it as a parameter or define it above
-  };
-
   // Define productsRef as a placeholder (should be passed in or managed properly in your component)
   const productsRef: { current: HTMLElement | null } = { current: null };
-
-  interface ProductsRef {
-    current: HTMLElement | null;
-  }
-
-  type Section = string;
-
-  const handleNavClick = (section: Section): void => {
-    setActiveSection(section);
-    if (section === "#login" && productsRef.current) {
-      setTimeout(() => {
-        productsRef.current!.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    }
-  };
 
   return {
     navItems,
@@ -194,16 +164,7 @@ export async function getInitialData() {
     popularByGenre,
     DEFAULT_GENRES_TO_SHOW,
     initialGenres,
-    handleFormSubmit,
-    handleNavClick,
     SEARCH_API,
   };
 }
-// Simple implementation: log the form result to the console
-function setFormResult(data: CustomFormData) {
-  console.log("Form submitted:", data);
-}
-// Simple implementation: log the active section to the console
-function setActiveSection(section: any) {
-  console.log("Active section set to:", section);
-}
+export const initialData = getInitialData();
