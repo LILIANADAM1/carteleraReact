@@ -24,7 +24,7 @@
 ## Características
 
 - **Catálogo de películas** con información y carátulas.
-- **Filtrado por géneros** con selector tipo Netflix.
+- **Filtrado por géneros** con selector.
 - **Búsqueda de películas** en tiempo real.
 - **Gestión de favoritos** (Mi Lista) persistente en localStorage.
 - **Autenticación segura** con Auth0.
