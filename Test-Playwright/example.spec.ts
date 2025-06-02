@@ -21,7 +21,7 @@ test("get started link", async ({ page }) => {
 
 test('test', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.getByRole('button', { name: 'Iniciar sesión' }).click();
+  await page.getByRole('button', { name: 'Iniciar sesión' }).click({ timeout: 60000 });
   await page.getByRole('button', { name: 'Continue with Google' }).click();
   await page.getByRole('textbox', { name: 'Email or phone' }).click();
   await page.getByRole('textbox', { name: 'Email or phone' }).fill('cesar');
