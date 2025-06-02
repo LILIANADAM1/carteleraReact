@@ -19,31 +19,19 @@ test("get started link", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("iniciar sesión y seleccionar género aventura", async ({ page }) => {
-  await page.goto("http://localhost:5173/carteleraReact/");
-
-  // 1. Hacer clic en el enlace para mostrar el formulario de inicio de sesión
-  await page.getByText("Iniciar Sesion", { exact: false }).click();
-
-  // 2. Esperar a que el formulario aparezca
-  await expect(page.getByPlaceholder("Tu nombre")).toBeVisible();
-
-  // 3. Llenar el formulario
-  await page.getByPlaceholder("Tu nombre").fill("usuarioPrueba");
-  await page.getByPlaceholder("ejemplo@email.com").fill("usuario@prueba.com");
-  await page.getByPlaceholder("Tu contraseña").fill("contraseñaSegura123");
-
-  // 4. Enviar el formulario
-  await page.getByRole("button", { name: /enviar/i }).click();
-
-  // Pausa para ver el resultado antes de continuar
-
-  // 5. Esperar a que aparezca el selector de género
-  const select = page.getByTestId("genre-select");
-  await expect(select).toBeVisible({ timeout: 10000 }); // esperar hasta 10s por si tarda en cargar
-
-  // 6. Seleccionar "Aventura"
-  await select.selectOption("Aventura");
-
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  await page.getByRole('button', { name: 'Iniciar sesión' }).click();
+  await page.getByRole('button', { name: 'Continue with Google' }).click();
+  await page.getByRole('textbox', { name: 'Email or phone' }).click();
+  await page.getByRole('textbox', { name: 'Email or phone' }).fill('cesar');
+  await page.getByRole('textbox', { name: 'Email or phone' }).click();
+  await page.getByRole('textbox', { name: 'Email or phone' }).fill('cesarismael.delgado@estudioenpenascal.com');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('textbox', { name: 'Enter your password' }).click();
+  await page.getByRole('textbox', { name: 'Enter your password' }).fill('3579253cesar');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByTestId('genre-select').selectOption('Aventura');
+  await page.getByTestId('genre-select').selectOption('Aventura');
   await page.pause();
 });
