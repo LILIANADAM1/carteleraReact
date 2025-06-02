@@ -33,6 +33,5 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter your password' }).fill('3579253cesar');
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByTestId('genre-select').selectOption('Aventura');
-  await page.getByTestId('genre-select').selectOption('Aventura');
-  await page.pause();
+  
 });
